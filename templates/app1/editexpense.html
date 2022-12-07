@@ -30,20 +30,10 @@
                             <label for="">Expense Account</label>
                             <select class="form-control" name="expenseaccount">
                                 <option value="{{ expnce.expenseaccount }}">{{ expnce.expenseaccount }}</option>
-                                <option value="Advertising and Marketing">Advertising and Marketing</option>
-                                <option value="Audit Fee">Audit Fee</option>
-                                <option value="Automobile Expense">Automobile Expense</option>
-                                <option value="Bad Debt">Bad Debt</option>
-                                <option value="Bank Fee And Charges">Bank Fee And Charges </option>
-                                <option value="Automobile charges">Automobile charges</option>
-                                <option value="Deprieciation Expenses">Deprieciation Expenses</option>
-                                <option value="Documentation Charges">Documentation Charges</option>
-                                <option value="Electricity Expenses">Electricity Expenses</option>
-                                <option value="Food Expenses">Food Expenses</option>
-                                <option value="IT And Internet charges">IT And Internet charges</option>
-                                <option value="Labour Charges">Labour Charges</option>
-                                <option value="Miscellaneous Expenses">Miscellaneous Expenses</option>
-                                <option value="Printing And Stationary">Printing And Stationary</option>
+                                {% for a in acc %}
+                                    <option value="{{a.name}}">{{a.name}}</option>
+                                {% endfor %}
+                                </option>
                             </select>
                         </div>
                         <div class="col-md-3 mt-2">
@@ -60,51 +50,26 @@
                         </div> 
                     </div><hr>
                     <div class="row">
-                        <div class="col-md-4 mt-3">
+                        <div class="col-md-3 mt-3">
                             <label for="">Amount</label>
                             <div class="d-flex">
                                 <p style="width: 60px;" class="form-control">INR</p>
                                 <input type="number" name="amount" value="{{ expnce.amount }}" class="form-control">
                             </div>
                         </div>
-                        <div class="col-md-4 mt-3">
+                        <div class="col-md-3 mt-3">
                             <label for="">Paid Through</label>
                             <select class="form-control" name="paidthrough">
                                 <option value="{{ expnce.paidthrough }}">{{ expnce.paidthrough }}</option>
-                                <option value="By Bank">By Bank</option>
-                                <option disabled>By Cash</option>
-                                <option value="Petty Cash">Petty Cash</option>
-                                <option value="Undeposited Founds">Undeposited Founds</option>
+                                <option disabled>Cash</option>
+                                    {% for a in acc1 %}
+                                        <option value="{{ a.name }}">{{ a.name }}</option>
+                                    {% endfor %}  
                             </select>
                         </div>
-                        <div class="col-md-4 mt-3">
-                            <label for="">Vendor</label>
-                            <select name="vendor" id="vendor" class="form-control" onchange="showvendor()">
-                                <option value="{{ expnce.vendor }}">{{ expnce.vendor }}</option>
-                                {% for v in vndr %}
-                                <option value="{{ v.firstname }} {{ v.lastname }}">{{ v.firstname }} {{ v.lastname }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row hide" id="vendordetail">
-                        <div class="col-md-4 mt-3">
-                            <label for="validationCustom04">GST Treatment</label>
-                            <select class="form-control" id="gsttyp" name="gsttype">
-                                <option value="{{ expnce.gsttype }}">{{ expnce.gsttype }}</option>
-                                <option value="Registered Business - Regular">Registered Business - Regular</option>
-                                <option value="Registered Business - Composition">Registered Business - Composition</option>
-                                <option value="unregistered Business">unregistered Business</option>
-                                <option value="Overseas">Overseas</option>
-                                <option value="Special Economic Zone (SEZ)">Special Economic Zone (SEZ)</option>
-                                <option value="Demed Exports">Demed Exports</option>
-                                <option value="Tax Deductor">Tax Deductor</option>
-                                <option value="SEZ Developer">SEZ Developer</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mt-3">
+                        <div class="col-md-3 mt-3">
                             <label for="">Source of Supply</label>
-                            <select name="sourceofsupply" id="" class="form-control">
+                            <select name="sourceofsupply" id="plosu" class="form-control">
                                 <option value="{{ expnce.sourceofsupply }}">{{ expnce.sourceofsupply }}</option>
                                 <option value="[AN] Andaman and Nicobar Islads">[AN] Andaman and Nicobar Islads</option>
                                 <option value="[AD] Andhra Predhesh">[AD] Andhra Predhesh</option>
@@ -123,7 +88,7 @@
                                 <option value="[JK] Jammu and Kashmir">[JK] Jammu and Kashmir</option>
                                 <option value="[JH] Jharkhand">[JH] Jharkhand</option>
                                 <option value="[KA] Karnataka">[KA] Karnataka</option>
-                                <option value="[KL] Kerala">[KL] Kerala</option>
+                                <option value="Kerala">[KL] Kerala</option>
                                 <option value="[LA] Ladakh">[LA] Ladakh</option>
                                 <option value="[LD] Lakshadweep">[LD] Lakshadweep</option>
                                 <option value="[MP] Madhya Predesh">[MP] Madhya Predesh</option>
@@ -146,51 +111,17 @@
                                 <option value="[OT] Other Territory">[OT] Other Territory</option>     
                             </select>
                         </div>
-                        <div class="col-md-4 mt-3">
-                            <label for="">Destination of Supply</label>
-                            <select name="destinofsupply" id="" class="form-control">
-                                <option value="{{ expnce.destinofsupply }}">{{ expnce.destinofsupply }}</option>
-                                <option value="[AN] Andaman and Nicobar Islads">[AN] Andaman and Nicobar Islads</option>
-                                <option value="[AD] Andhra Predhesh">[AD] Andhra Predhesh</option>
-                                <option value="[AR] Arunachal Predesh">[AR] Arunachal Predesh</option>
-                                <option value="[AS] Assam">[AS] Assam</option>
-                                <option value="[BR] Bihar">[BR] Bihar</option>
-                                <option value="[CH] Chandigarh">[CH] Chandigarh</option>
-                                <option value="[CG] Chhattisgarh">[CG] Chhattisgarh</option>
-                                <option value="[DNH] Dadra and Nagar Haveli">[DNH] Dadra and Nagar Haveli</option>
-                                <option value="[DD] Damn anad Diu">[DD] Damn anad Diu</option>
-                                <option value="[DL] Delhi">[DL] Delhi</option>
-                                <option value="[GA] Goa">[GA] Goa</option>
-                                <option value="[GJ] Gujarat">[GJ] Gujarat</option>
-                                <option value="[HR] Haryana">[HR] Haryana</option>
-                                <option value="[HP] Himachal Predesh">[HP] Himachal Predesh</option>
-                                <option value="[JK] Jammu and Kashmir">[JK] Jammu and Kashmir</option>
-                                <option value="[JH] Jharkhand">[JH] Jharkhand</option>
-                                <option value="[KA] Karnataka">[KA] Karnataka</option>
-                                <option value="[KL] Kerala">[KL] Kerala</option>
-                                <option value="[LA] Ladakh">[LA] Ladakh</option>
-                                <option value="[LD] Lakshadweep">[LD] Lakshadweep</option>
-                                <option value="[MP] Madhya Predesh">[MP] Madhya Predesh</option>
-                                <option value="[MH] Maharashtra">[MH] Maharashtra</option>
-                                <option value="[MN] Manipur">[MN] Manipur</option>
-                                <option value="[ML] Meghalaya">[ML] Meghalaya</option>
-                                <option value="[MZ] Mizoram">[MZ] Mizoram</option>
-                                <option value="[NL] Nagaland">[NL] Nagaland</option>
-                                <option value="[OD] Odisha">[OD] Odisha</option>
-                                <option value="[PY] Puducherry">[PY] Puducherry</option>
-                                <option value="[PB] Punjab">[PB] Punjab</option>
-                                <option value="[RJ] Rajasthan">[RJ] Rajasthan</option>
-                                <option value="[SK] Sikkim">[SK] Sikkim</option>
-                                <option value="[TN] Tamil Nadu">[TN] Tamil Nadu</option>
-                                <option value="[TS] Telangana">[TS] Telangana</option>
-                                <option value="[TR] Tripura">[TR] Tripura</option>
-                                <option value="[UP] Uttar Predesh">[UP] Uttar Predesh</option>
-                                <option value="[UK] Uttarakhand">[UK] Uttarakhand</option>
-                                <option value="[WB] West Bengal">[WB] West Bengal</option>
-                                <option value="[OT] Other Territory">[OT] Other Territory</option>     
+                        <div class="col-md-3 mt-3">
+                            <label for="">Vendor</label>
+                            <select name="vendor" id="vendor" class="form-control" onchange="showvendor()">
+                                <option value="{{ expnce.vendor }}">{{ expnce.vendor }}</option>
+                                {% for v in vndr %}
+                                <option value="{{ v.firstname }} {{ v.lastname }}">{{ v.firstname }} {{ v.lastname }}</option>
+                                {% endfor %}
                             </select>
                         </div>
-                    </div><hr>
+                    </div>
+                    <hr>
                     <div class="row">
                         <div class="col-md-3 mt-3">
                             <label for="">Customer</label>
@@ -203,26 +134,29 @@
                         </div>
                         <div class="col-md-3 mt-3">
                             <label for="">Tax</label>
-                            <select name="tax" id="tax" class="form-control">
-                                <option value="{{ expnce.tax }}">{{ expnce.tax }}</option>
-                                <option value="28.0% GST">28.0% GST(28%)</option>
-                                <option value="28.0% IGST">28.0% IGST(28%)</option>
-                                <option value="18.0% GST">18.0% GST(18%)</option>
-                                <option value="18.0% IGST">18.0% IGST(18%)</option>
-                                <option value="12.0% GST">12.0% GST(12%)</option>
-                                <option value="12.0% IGST">12.0% IGST(12%)</option>
-                                <option value="06.0% GST">06.0% GST(06%)</option>
-                                <option value="06.0% IGST">06.0% IGST(06%)</option>
-                                <option value="05.0% GST">05.0% GST(05%)</option>
-                                <option value="05.0% IGST">05.0% IGST(05%)</option>
-                                <option value="03.0% GST">03.0% GST(03%)</option>
-                                <option value="03.0% IGST">03.0% IGST(03%)</option>
-                                <option value="0.25% GST">0.25% GST(0.25%)</option>
-                                <option value="0.25% IGST">0.25% IGST(0.25%)</option>
-                                <option value="0.0% GST">0.0% GST(0%)</option>
-                                <option value="Exempt GST(0%)">Exempt GST(0%)</option>
-                                <option value="Exempt IGST(0%)">Exempt IGST(0%)</option>
-                                <option value="Out of Scope(0%)">Out of Scope(0%)</option>
+                            <select name="tax" id="tax1" class="form-control">
+                                <option id="ta1" value="{{ expnce.tax }}" text={{ cmp1.state }}>{{ expnce.tax }}% GST</option>
+                                <option value=28 text={{ cmp1.state }}>28.0% GST(28%)</option>
+                                <option value=18 text={{ cmp1.state }}>18.0% GST(18%)</option>
+                                <option value=12 text={{ cmp1.state }}>12.0% GST(12%)</option>
+                                <option value=6 text={{ cmp1.state }}>06.0% GST(06%)</option>
+                                <option value=5 text={{ cmp1.state }}>05.0% GST(05%)</option>
+                                <option value=3 text={{ cmp1.state }}>03.0% GST(03%)</option>
+                                <option value=.25 text={{ cmp1.state }}>0.25% GST(0.25%)</option>
+                                <option value=0 text={{ cmp1.state }}>0.0% GST(0%)</option>
+                                <option value=0 text={{ cmp1.state }}>Exempt GST(0%)</option>
+                                <option value=0 text={{ cmp1.state }}>Out of Scope(0%)</option>
+                                <option id="ta5" value="{{ expnce.tax }}" text=" ">{{ expnce.tax }}% IGST</option>
+                                <option value=28 text=" ">28.0% IGST(28%)</option>
+                                <option value=18 text=" ">18.0% IGST(18%)</option>
+                                <option value=12 text=" ">12.0% IGST(12%)</option>
+                                <option value=6 text=" ">06.0% IGST(06%)</option>
+                                <option value=5 text=" ">05.0% IGST(05%)</option>
+                                <option value=3 text=" ">03.0% IGST(03%)</option>
+                                <option value=.25 text=" ">0.25% IGST(0.25%)</option>
+                                <option value=0 text=" ">0.0% IGST(0%)</option>
+                                <option value=0 text=" ">Exempt IGST(0%)</option>
+                                <option value=0 text=" ">Out of Scope(0%)</option>
                           </select>
                         </div>
                         <div class="col-md-3 mt-3">
@@ -293,6 +227,37 @@
             }
         } 
     </script>
+
+<script>
+    $(document).ready(function() {
+        var $select1 = $('#plosu'),
+        $select2 = $('#tax1'),
+        $select3 = $('#tax2'),
+        $select4 = $('#tax3'),
+        $select5 = $('#tax4'),
+        $options = $select2.find('option'),
+        $options1 = $select3.find('option'),
+        $options2 = $select4.find('option'),
+        $options3 = $select5.find('option');
+        if ($options1.value == '{{ cmp1.state }}') {
+            $options1.text = "{{ cmp1.state }}"
+        }
+        $select1.on('change', function() {
+            if (this.value == "{{ cmp1.state }}") {
+                $select2.html($options.filter('[text="' + this.value + '"]'));
+                $select3.html($options1.filter('[text="' + this.value + '"]'));
+                $select4.html($options2.filter('[text="' + this.value + '"]'));
+                $select5.html($options3.filter('[text="' + this.value + '"]'));
+            } 
+            else {
+                $select2.html($options.filter('[text="' + " " + '"]'));
+                $select3.html($options1.filter('[text="' + " " + '"]'));
+                $select4.html($options2.filter('[text="' + " " + '"]'));
+                $select5.html($options3.filter('[text="' + " " + '"]'));
+            }
+        }).trigger('change');
+    });
+</script>
 
     <script>
         $(document).ready(function() {

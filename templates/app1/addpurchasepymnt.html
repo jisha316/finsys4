@@ -52,32 +52,11 @@
                                 <label class="col-form-label">Paid Through</label>
                                 <div class="d-flex">
                                     <select name="depto" id="" class="form-control" style="width: 95%;">
-                                        <option value="Bank">Bank</option>
                                         <option disabled>Cash</option>
-                                        <option value="Petty Cash" selected>Petty Cash</option>
-                                        <option value="Undeposited Funds">Undeposited Funds</option>
-                                        <!-- {% for acc in accoun %}
+                                        {% for acc in acc %}
                                             <option value="{{ acc.name }}">{{ acc.name }}</option>
-                                        {% endfor %} -->
-                                        <!-- <option value="Deferred CGST">Deferred CGST</option>
-                                        <option value="Deferred GST Input Credit">Deferred GST Input Credit</option>
-                                        <option value="Deferred IGST">Deferred IGST</option>
-                                        <option value="Deferred Krishi Kalyan Cess Input Credit">Deferred Krishi
-                                            Kalyan
-                                            Cess Input Credit
-                                        </option>
-                                        <option value="Deferred SGST">Deferred SGST</option>
-                                        <option value="Deferred Service Tax Input Credit">Deferred Service Tax Input
-                                            Credit
-                                        </option>
-                                        <option value="Deferred VAT Input Credit">Deferred VAT Input Credit</option>
-                                        <option value="GST Refund">GST Refund</option>
-                                        <option value="Inventory Asset">Inventory Asset</option>
-                                        <option value="Krishi Kalyan Cess Refund">Krishi Kalyan Cess Refund</option>
-                                        <option value="Prepaid Insurance">Prepaid Insurance</option>
-                                        <option value="Service Tax Refund">Service Tax Refund</option>
-                                        <option value="TDS Receivable">TDS Receivable</option>
-                                        <option value="Uncategorised Asset">Uncategorised Asset</option>  -->
+                                        {% endfor %}
+                                        <option value="Bank">Bank</option>
                                     </select>
                                     <a href="{% url 'paymentcoacreate' %}"><button type="button" class="btn btn-outline-secondary ml-1">+</button></a>
                                 </div>

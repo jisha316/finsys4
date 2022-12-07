@@ -89,7 +89,7 @@
 
                         <div class="table-responsive" style="margin-top: 100px;">
                             <div>
-                                <table class="table table-hover table-bordered">
+                                <table class="table table-hover">
                                     <thead>
                                         <tr>
                                             <th class="center font-weight-bolder border-secondary" style="color: black;">ACCOUNT</th>
@@ -105,14 +105,14 @@
                                         </tr>
                                         {% for i in ar %}
                                             {% if i.payments != 0.0 %}
-                                                <tr class="tr" onclick="window.location='plreport11/{{ i.accname }} ';">
-                                                    <td class="center font-weight-light border-secondary" style="color: black; padding-left: 90px">
+                                                <tr class="tr" onclick="window.location='tbreport/{{ i.account }} ';">
+                                                    <td class="center font-weight-light" style="color: black; padding-left: 90px">
                                                         {{ i.account }}
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;">
+                                                    <td class="center font-weight-light " style="color: black;">
                                                         {{ i.payments }}
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;">
+                                                    <td class="center font-weight-light" style="color: black;">
                                                         
                                                     </td>
                                                 </tr>
@@ -120,14 +120,14 @@
                                         {% endfor %}
                                         {% for i in cas %}
                                             {% if i.payments != 0.0 %}
-                                                <tr class="tr" onclick="window.location='plreport11/{{ i.accname }} ';">
-                                                    <td class="center font-weight-light border-secondary" style="color: black; padding-left: 90px">
+                                                <tr class="tr" onclick="window.location='tbreport/{{ i.account }} ';">
+                                                    <td class="center font-weight-light " style="color: black; padding-left: 90px">
                                                         {{ i.account }}
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;">
+                                                    <td class="center font-weight-light " style="color: black;">
                                                         {{ i.t1 }}
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;">
+                                                    <td class="center font-weight-light " style="color: black;">
                                                         
                                                     </td>
                                                 </tr>
@@ -135,14 +135,14 @@
                                         {% endfor %}
                                         {% for i in ca %}
                                             {% if i.payments != 0.0 %}
-                                                <tr class="tr" onclick="window.location='plreport11/{{ i.accname }} ';">
-                                                    <td class="center font-weight-light border-secondary" style="color: black; padding-left: 90px">
+                                                <tr class="tr" onclick="window.location='tbreport/{{ i.account }} ';">
+                                                    <td class="center font-weight-light" style="color: black; padding-left: 90px">
                                                         {{ i.account }}
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;">
+                                                    <td class="center font-weight-light" style="color: black;">
                                                         
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;">
+                                                    <td class="center font-weight-light" style="color: black;">
                                                         {{ i.t1 }}
                                                     </td>
                                                 </tr>
@@ -157,14 +157,14 @@
                                         </tr>
                                         {% for i in ap %}
                                             {% if i.payments != 0.0 %}
-                                                <tr class="tr" onclick="window.location='plreport11/{{ i.accname }} ';">
-                                                    <td class="center font-weight-light border-secondary" style="color: black; padding-left: 90px">
+                                                <tr class="tr" onclick="window.location='tbreport/{{ i.account }} ';">
+                                                    <td class="center font-weight-light" style="color: black; padding-left: 90px">
                                                         {{ i.account }}
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;">
+                                                    <td class="center font-weight-light" style="color: black;">
                                                         
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;">
+                                                    <td class="center font-weight-light" style="color: black;">
                                                         {{ i.t1 }}
                                                     </td>
                                                 </tr>
@@ -173,14 +173,14 @@
     
                                         {% for i in cl %}
                                             {% if i.payments != 0.0 %}
-                                                <tr class="tr" onclick="window.location='plreport11/{{ i.accname }} ';">
-                                                    <td class="center font-weight-light border-secondary" style="color: black; padding-left: 90px">
+                                                <tr class="tr" onclick="window.location='tbreport/{{ i.account }} ';">
+                                                    <td class="center font-weight-light " style="color: black; padding-left: 90px">
                                                         {{ i.account }}
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;">
+                                                    <td class="center font-weight-light " style="color: black;">
                                                         
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;">{{ i.t2 }}</td>
+                                                    <td class="center font-weight-light " style="color: black;">{{ i.t2 }}</td>
                                                 </tr>
                                             {% endif %}
                                         {% endfor %}
@@ -193,14 +193,14 @@
                                         </tr>
                                         {% for i in incm %}
                                             {% if i.payments != 0.0 %}
-                                                <tr class="tr" onclick="window.location='plreport11/{{ i.accname }} ';">
-                                                    <td class="center font-weight-light border-secondary" style="color: black; padding-left: 90px">
+                                                <tr class="tr" onclick="window.location='tbreport/{{ i.accname }} ';">
+                                                    <td class="center font-weight-light" style="color: black; padding-left: 90px">
                                                        {{ i.accname }}
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;">
+                                                    <td class="center font-weight-light" style="color: black;">
                                                         
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;">
+                                                    <td class="center font-weight-light " style="color: black;">
                                                         {{ i.t3 }}
                                                     </td>
                                                 </tr>
@@ -214,27 +214,27 @@
                                         </tr>
                                         {% for i in cogs %}
                                             {% if i.payments != 0.0 %}
-                                                <tr class="tr" onclick="window.location='plreport11/{{ i.accname }} ';">
-                                                    <td class="center font-weight-light border-secondary" style="color: black; padding-left: 90px">
+                                                <tr class="tr" onclick="window.location='tbreport/{{ i.accname }} ';">
+                                                    <td class="center font-weight-light" style="color: black; padding-left: 90px">
                                                        {{ i.accname }}
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;">
+                                                    <td class="center font-weight-light" style="color: black;">
                                                         {{ i.t3 }}
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;"></td>
+                                                    <td class="center font-weight-light" style="color: black;"></td>
                                                 </tr>
                                             {% endif %}
                                         {% endfor %}
                                         {% for i in expc %}
                                             {% if i.payments != 0.0 %}
-                                                <tr class="tr" onclick="window.location='plreport11/{{ i.accname }} ';">
-                                                    <td class="center font-weight-light border-secondary" style="color: black; padding-left: 90px">
+                                                <tr class="tr" onclick="window.location='tbreport/{{ i.accname }} ';">
+                                                    <td class="center font-weight-light " style="color: black; padding-left: 90px">
                                                         {{ i.accname }}
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;">
+                                                    <td class="center font-weight-light" style="color: black;">
                                                         {{ i.t4 }}
                                                     </td>
-                                                    <td class="center font-weight-light border-secondary" style="color: black;"></td>
+                                                    <td class="center font-weight-light" style="color: black;"></td>
                                                 </tr>
                                             {% endif %}
                                         {% endfor %}

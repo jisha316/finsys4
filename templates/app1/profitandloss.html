@@ -102,7 +102,7 @@
                                     </tr>
                                     {% for i in inv %}
                                     {% if i.payments != 0.0 %}
-                                        <tr class="tr" onclick="window.location='plreport11/{{ i.accname }} ';">
+                                        <tr class="tr" onclick="window.location='plreport/{{ i.accname }} ';">
                                             <td class="center font-weight-light"
                                                 style="color: black; width: 85%; padding-left: 90px">{{ i.accname }}</td>
                                             <td class="center font-weight-light"
@@ -166,7 +166,7 @@
                                 </tr>
                                 {% for i in pbl %}
                                     {% if i.payments != 0.0 %}
-                                        <tr class="tr" onclick="window.location='plreport11/{{ i.accname }} ';">
+                                        <tr class="tr" onclick="window.location='plreport/{{ i.accname }} ';">
                                             <td class="center font-weight-light"
                                                 style="color: black; width: 85%; padding-left: 90px">{{ i.accname }}</td>
                                             <td class="center font-weight-light"
@@ -259,7 +259,7 @@
 
                                 {% for i in exp %}
                                     {% if i.payments != 0.0 %}
-                                        <tr class="tr" onclick="window.location='plreport11/{{ i.accname }} ';">
+                                        <tr class="tr" onclick="window.location='plreport/{{ i.accname }} ';">
                                             <td class="center font-weight-light"
                                                 style="color: black; width: 85%; padding-left: 90px">{{ i.accname }}</td>
                                             <td class="center font-weight-light"
