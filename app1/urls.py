@@ -325,6 +325,7 @@ urlpatterns = [
     re_path(r'^addtoaccounts$', views.addtoaccounts, name='addtoaccounts'),
 
     re_path(r'^profitandloss$', views.profitandloss, name='profitandloss'),
+    re_path(r'^profitandloss1$', views.profitandloss1, name='profitandloss1'),
     re_path(r'^profitandlossfilter$', views.profitandlossfiltered, name='profitandlossfilter'),
     re_path(r'^balancesheet$', views.balancesheet, name='balancesheet'),
     re_path(r'^balancesheetfilter$', views.balancesheetfiltered, name='balancesheetfilter'),
@@ -743,9 +744,11 @@ urlpatterns = [
     path('purchase_acctransactions1',views.purchase_acctransactions1,name='purchase_acctransactions1'),
 
     path('trial_balance', views.trial_balance, name='trial_balance'),
+    path('trial_balance1', views.trial_balance1, name='trial_balance1'),
     path('plreport/<str:id>', views.plreport, name='plreport'),
     path('bsreport/<str:id>', views.bsreport, name='bsreport'),
     path('tbreport/<str:id>', views.tbreport, name='tbreport'),
+    path('tbreport1/<str:id>', views.tbreport1, name='tbreport1'),
 
     re_path(r'^demo$', views.demo, name='demo'),
     re_path(r'^itemdata$', views.itemdata, name='itemdata'),

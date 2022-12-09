@@ -103,6 +103,9 @@
 
                                     </tr>
                                     </thead>
+                                    <tbody id='vendordata'>
+                                       
+                                    </tbody>
                                     <tbody id='billdata'>
                                        
                                     </tbody>
@@ -226,10 +229,35 @@
                 success:function(response){
                     console.log(response)
                     data = response.billitm
-                    xt= response.ct
+                    opb = response.opb 
+                    obdue = response.obdue
+                    xt= response.vd
+
+                    if (opb != null) {
+                        $('#tab_logic #vendordata').append(
+                            `
+                                <tr id='addr1'>
+                                    <td>${i+1}</td>
+                                    <td><input type="text" name="billdate[]" id="" value="${date}" class="form-control"/></td>
+                                    <td><input type="text" name='billno[]' id="" value="Vendor Opening Balance" class="form-control"/></td>
+                                    <td><input type="text" name='billamount[]' value="${opb}" id=""
+                                        class="form-control qty" step="0" min="0"/>
+                                    </td>
+                                    <td><input type="text" name="duedate[]" id="" value="" class="form-control"/></td>
+                                    <td><input type="number" name='amountdue[]' id="openbal${i}" value="${obdue}"
+                                        class="form-control price" step="0.00" min="0"/>
+                                    </td>
+                                    <td><input type="number" name='payment[]' onchange="addagain()" id="payment0" placeholder='0.00'
+                                        class="form-control total" value="0"/>
+                                    </td>
+                                </tr>
+                            `        
+                        )
+                    }   
+
                     for (i=0;i<data.length;i++){
                         j=i;
-                        $('#tab_logic tbody').append(
+                        $('#tab_logic billdata').append(
                             `
                                 <tr id='addr1'>
                                     <td>${i+1}</td>

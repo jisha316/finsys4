@@ -1225,16 +1225,6 @@ class mjournal(models.Model):
     notes = models.CharField(max_length=100, default='')
     j_type = models.CharField(max_length=100,null=True,blank=True)
     currency = models.CharField(max_length=100, default='')
-    account1 = models.CharField(max_length=100, default='',null=True,blank=True)
-    desc1 = models.CharField(max_length=100,null=True)
-    contact1 = models.CharField(max_length=100,null=True)
-    debit1 = models.CharField(max_length=100, default='')
-    credit1 = models.CharField(max_length=100, default='')
-    account2 = models.CharField(max_length=100, default='',null=True,blank=True)
-    desc2 = models.CharField(max_length=100,null=True)
-    contact2 = models.CharField(max_length=100,null=True)
-    debit2 = models.CharField(max_length=100, default='')
-    credit2 = models.CharField(max_length=100, default='')
     attach = models.FileField(upload_to="", default='') 
     s_totaldeb = models.CharField(max_length=100, default='')
     s_totalcre = models.CharField(max_length=100, default='')
@@ -1243,6 +1233,14 @@ class mjournal(models.Model):
     difference = models.CharField(max_length=100, default='')
     status = models.CharField(max_length=100,default="DRAFT")
 
+class mjournal1(models.Model):
+    mjrnl = models.ForeignKey(mjournal, on_delete=models.CASCADE,null=True)
+    cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
+    account = models.CharField(max_length=100, default='',null=True,blank=True)
+    desc = models.TextField(null=True)
+    contact = models.CharField(max_length=100,null=True)
+    debit = models.FloatField(default='0.0',blank=True,null=True)
+    credit = models.FloatField(default='0.0',blank=True,null=True)
 
 class currencies(models.Model):
     currencyid = models.AutoField(("CURRENCYID"), primary_key=True)

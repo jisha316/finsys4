@@ -13795,6 +13795,102 @@ def profitandloss(request):
         return render(request, 'app1/profitandloss.html', context)
     return redirect('/')   
 
+def profitandloss1(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        
+        toda = date.today()
+        tod = toda.strftime("%Y-%m-%d")
+        filmeth = request.POST['reportperiod']
+        if filmeth == 'Today':
+            fromdate = tod
+            todate = tod
+        elif filmeth == 'Custom':
+            fromdate = request.POST['fper']
+            todate = request.POST['tper']
+        elif filmeth == 'This month':
+            fromdate = toda.strftime("%Y-%m-01")
+            todate = toda.strftime("%Y-%m-31")
+        elif filmeth == 'This financial year':
+            if int(toda.strftime("%m")) >= 1 and int(toda.strftime("%m")) <= 3:
+                pyear = int(toda.strftime("%Y")) - 1
+                fromdate = f'{pyear}-03-01'
+                todate = f'{toda.strftime("%Y")}-03-31'
+            else:
+                pyear = int(toda.strftime("%Y")) + 1
+                fromdate = f'{toda.strftime("%Y")}-03-01'
+                todate = f'{pyear}-03-31'
+        else:
+            return redirect('profitandloss')
+
+        # pur=purchasebill.objects.all()
+        # sum1=0
+        # for i in pur:
+        #     sum1+=i.grand_total
+        
+        # inv = invoice.objects.filter()
+        # sum2=0
+        # for i in inv:
+        #     sum2+=i.grandtotal
+
+        # income = accounts1.objects.filter(acctype='Income',cid=cmp1)
+        # sum2=0
+        # for i in income:
+        #     sum2+=i.balance
+
+        # cost = accounts1.objects.filter(acctype='Cost Of Goods Sold',cid=cmp1)
+        # sum1=0
+        # for i in cost:
+        #     sum1+=i.balance
+
+        pbl = profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,accname='Cost of Goods Sold').values('accname').annotate(t1=Sum('payments'))
+
+        inv = profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,transactions='Invoice').values('accname').annotate(t1=Sum('payments'))
+
+        exp = profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,transactions='Expense').values('accname').annotate(t1=Sum('payments'))
+
+        acc = profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate)
+        sum1=0
+        sum2=0
+        sum3=0
+        sum4=0
+        sumtot = 0
+
+        for i in acc :
+            if i.transactions =="Invoice":
+                sum1+=i.payments
+
+            if i.accname =="Cost of Goods Sold":
+                sum2+=i.payments
+
+            if i.transactions =="Expense":
+                sum3+=i.payments
+
+        sum4 = sum1-sum2
+
+
+        # exp = profit_loss.objects.filter(transactions='Expense',cid=cmp1)
+        # sum3=0
+        # for i in exp:
+        #     sum3+=i.payments
+
+        # ex = expense2.objects.filter().values('account').annotate(t1=Sum('amount'))
+        # ex = expense2.objects.all()
+        # sum3 = 0
+        # for i in ex:
+        #     sum3+=i.amount
+
+        sumtot=sum4-sum3  
+
+        context={'pbl':pbl,'inv':inv,'sum1':sum1,'sum2':sum2,'sum3':sum3,'sumtot':sumtot,'exp':exp,'sum4':sum4,'cmp1': cmp1}
+
+        return render(request, 'app1/profitandloss.html', context)
+    return redirect('/')   
+
 def plreport(request,id):
     if 'uid' in request.session:
         if request.session.has_key('uid'):
@@ -29272,7 +29368,8 @@ def add_mjournal(request):
         cmp1 = company.objects.get(id=request.session['uid'])
         acc = accounts1.objects.filter(cid=cmp1)
         cust = customer.objects.filter(cid=cmp1)
-        context = {'acc':acc,'cmp1':cmp1,'cust':cust}
+        vend = vendor.objects.filter(cid=cmp1)
+        context = {'acc':acc,'cmp1':cmp1,'cust':cust,'vend':vend}
         return render(request,'app1/add_mjournal.html',context)    
     except:
         return redirect('gomjoural')    
@@ -29288,16 +29385,7 @@ def create_mjournal(request):
         notes = request.POST['jnotes']
         currency = request.POST['jcurrency']
         mjtype = request.POST.get('jtype')
-        acc1 = request.POST.get('account')
-        desc1 = request.POST['jdesc']
-        cont1 = request.POST['jcontact']
-        deb1 = request.POST['jdebit']
-        cred1 = request.POST['jcredit']
-        acc2 = request.POST.get('account1')
-        desc2 = request.POST['jdesc1']
-        cont2 = request.POST['jcontact1']
-        deb2 = request.POST['jdebit1']
-        cred2 = request.POST['jcredit1']
+        
         file = request.FILES.get('pic')
         subtotal = request.POST['sub_total']
         subtotal1 = request.POST['sub_total1']
@@ -29305,32 +29393,31 @@ def create_mjournal(request):
         total1 = request.POST['total_amount1']
         differ = request.POST['differ']
             
-        mjrnl = mjournal(date=mjdate,mj_no=mjno,ref_no=mjrno,
-                                notes=notes,j_type=mjtype,
-                                currency=currency,
-                                account1=acc1,
-                                desc1=desc1,
-                                contact1=cont1,
-                                debit1=deb1,
-                                credit1=cred1,
-                                account2=acc2,
-                                desc2=desc2,
-                                contact2=cont2,
-                                debit2=deb2,
-                                credit2=cred2,
-                                attach=file,
-                                s_totaldeb=subtotal,
-                                s_totalcre=subtotal1,
-                                total_deb=total,
-                                total_cre=total1,
-                                difference=differ,
-                                cid=cmp1)
+        mjrnl1 = mjournal(date=mjdate, mj_no=mjno, ref_no=mjrno, notes=notes,j_type=mjtype, currency=currency, attach=file, 
+                        s_totaldeb=subtotal, s_totalcre=subtotal1, total_deb=total, total_cre=total1, difference=differ,
+                        cid=cmp1)
 
-        if deb1 == cred2:
-            mjrnl.save()
-        else:    
-            messages.info( request, 'Please ensure that the debit and credit are equal')
-            return render(request, 'app1/add_mjournal.html')                        
+        # if subtotal == subtotal1:
+        mjrnl1.save()
+        # else:    
+            # messages.info( request, 'Please ensure that the debit and credit are equal')
+
+        acc = request.POST.getlist('account[]')
+        desc = request.POST.getlist('jdesc[]')
+        cont = request.POST.getlist('jcontact[]')
+        deb = request.POST.getlist('jdebit[]')
+        cred = request.POST.getlist('jcredit[]')
+
+        mj=mjournal.objects.get(id=mjrnl1.id)
+
+        if len(acc)==len(desc)==len(cont)==len(deb)==len(cred) and acc and desc and cont and deb and cred:
+            mapped=zip(acc,desc,cont,deb,cred)
+            mapped=list(mapped)
+            for ele in mapped:
+                mjrnlAdd,created = mjournal1.objects.get_or_create(account = ele[0],desc = ele[1],contact=ele[2],debit=ele[3],
+                credit=ele[4],mjrnl=mj,cid=cmp1)
+
+            return render(request, 'app1/add_mjournal.html',{'cmp1':cmp1})                        
         return redirect('gomjoural')
     return render(request,'app1/add_mjournal.html')
          
@@ -32431,9 +32518,37 @@ def getbilldata(request):
         cmp1 = company.objects.get(id=request.session["uid"])
         id = request.POST['select']
         print (id)
-        billitm = purchasebill.objects.values().filter(vendor_name=id)
+
+        x = id.split()
+        x.append(" ")
+        a = x[0]
+        b = x[1]
+        if x[2] is not None:
+            b = x[1] + " " + x[2]
+
+        venobject = vendor.objects.values().filter(firstname=a, lastname=b, cid=cmp1)
+        billitm = purchasebill.objects.values().filter(vendor_name=id ,cid =cmp1,status='Billed')
+
+        venopenbl = vendor.objects.get(firstname=a,lastname=b,cid =cmp1)
+
+        if venopenbl.opening_balance != 0.0:
+
+            vend1 = vendor.objects.get(firstname=a,lastname=b,cid =cmp1)
+
+            opb = vend1.opening_balance
+            print(opb )
+            obdue = vend1.op_balance_due
+
+            
+
         x_data = list(billitm)
-        return JsonResponse({"status":" not","billitm":x_data})
+        vd= list(venobject)
+        
+        return JsonResponse({"status":" not","invitem":x_data,"vd":vd,'opb':opb,'obdue':obdue,})
+
+        # billitm = purchasebill.objects.values().filter(vendor_name=id)
+        # x_data = list(billitm)
+        # return JsonResponse({"status":" not","billitm":x_data})
 
 def gopurchasepymnt(request):
     if 'uid' in request.session:
@@ -33630,7 +33745,211 @@ def trial_balance(request):
         return render(request,'app1/trial_balance.html',context)
     return redirect('/') 
 
+def trial_balance1(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+
+        toda = date.today()
+        tod = toda.strftime("%Y-%m-%d")
+        filmeth = request.POST['reportperiod']
+        if filmeth == 'Today':
+            fromdate = tod
+            todate = tod
+        elif filmeth == 'Custom':
+            fromdate = request.POST['fper']
+            todate = request.POST['tper']
+        elif filmeth == 'This month':
+            fromdate = toda.strftime("%Y-%m-01")
+            todate = toda.strftime("%Y-%m-31")
+        elif filmeth == 'This financial year':
+            if int(toda.strftime("%m")) >= 1 and int(toda.strftime("%m")) <= 3:
+                pyear = int(toda.strftime("%Y")) - 1
+                fromdate = f'{pyear}-03-01'
+                todate = f'{toda.strftime("%Y")}-03-31'
+            else:
+                pyear = int(toda.strftime("%Y")) + 1
+                fromdate = f'{toda.strftime("%Y")}-03-01'
+                todate = f'{pyear}-03-31'
+        else:
+            return redirect('trial_balance')
+
+        ar=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Account Receivable(Debtors)')
+        cas=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Current Assets').values(
+            'account').annotate(t1=Sum('payments'))
+        ca=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Current Asset').values(
+            'account').annotate(t1=Sum('payments'))
+        cl=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Current Liabilities').values(
+            'account').annotate(t2=Sum('payments'))
+        ap=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Accounts Payable(Creditors)').values(
+            'account').annotate(t1=Sum('payments'))
+        incm=profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Income').values(
+            'accname').annotate(t3=Sum('payments'))
+        cogs=profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Cost Of Goods Sold').values(
+            'accname').annotate(t3=Sum('payments'))
+        expc=profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Expense').values(
+            'accname').annotate(t4=Sum('payments'))
+
+        ar1=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Account Receivable(Debtors)')
+        cas1=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Current Assets')
+        ca1=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Current Asset')
+        cl1=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Current Liabilities')
+        ap1=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Accounts Payable(Creditors)')
+        incm1=profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Income')
+        cogs1=profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Cost Of Goods Sold')
+        expc1=profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Expense')
+
+        t1=0
+        t2=0
+        sum1=0
+
+        for i in cas1:
+            t1+=i.payments
+        for i in ar1:
+            t2+=i.payments
+        
+        sum1=t1+t2
+        print(sum1)
+
+        t3=0
+        t4=0
+        sum2=0
+
+        for i in cl1:
+            t3+=i.payments
+        for i in ap1:
+            t4+=i.payments
+        
+        sum2=t3+t4
+        print(sum2)
+
+        t5=0
+        t6=0
+        sum3=0
+
+        for i in cogs1:
+            t5+=i.payments
+        for i in expc1:
+            t6+=i.payments
+        
+        sum3=t5+t6
+        print(sum3)
+
+        t7=0
+        sum4=0
+        for i in ca1:
+            t7+=i.payments
+
+        sum4=t7
+        print(sum4)
+
+        t8=0
+        sum5=0
+        for i in incm1:
+            t8+=i.payments
+
+        sum5=t8
+        print(sum5)
+
+        sumtot=sum1+sum3
+        print(sumtot)
+        sumtot1=sum2+sum4+sum5
+        print(sumtot1)
+
+
+        context = {'cmp1':cmp1, 'ar':ar, 'cas':cas, 'ca':ca, 'cs':ca, 'cl':cl, 'ap':ap, 
+        'cogs':cogs, 'expc':expc, 'incm':incm,'sumtot':sumtot, 'sumtot1':sumtot1}
+        return render(request,'app1/trial_balance.html',context)
+    return redirect('/') 
+
 def tbreport(request,id):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+
+        toda = date.today()
+        tod = toda.strftime("%Y-%m-%d")
+        to=toda.strftime("%d-%m-%Y")
+
+        filmeth = request.POST['reportperiod']
+        if filmeth == 'Today':
+            fromdate = tod
+            todate = tod
+        elif filmeth == 'Custom':
+            fromdate = request.POST['fper']
+            todate = request.POST['tper']
+        elif filmeth == 'This month':
+            fromdate = toda.strftime("%Y-%m-01")
+            todate = toda.strftime("%Y-%m-31")
+        elif filmeth == 'This financial year':
+            if int(toda.strftime("%m")) >= 1 and int(toda.strftime("%m")) <= 3:
+                pyear = int(toda.strftime("%Y")) - 1
+                fromdate = f'{pyear}-03-01'
+                todate = f'{toda.strftime("%Y")}-03-31'
+            else:
+                pyear = int(toda.strftime("%Y")) + 1
+                fromdate = f'{toda.strftime("%Y")}-03-01'
+                todate = f'{pyear}-03-31'
+        else:
+            return redirect('trial_balance',id)
+
+        bs = balance_sheet.objects.filter(account=id,date__gte=fromdate, date__lte=todate,cid=cmp1)
+        pl = profit_loss.objects.filter(accname=id,date__gte=fromdate, date__lte=todate,cid=cmp1)
+
+        debit=0
+        credit=0
+        total =0
+
+        for i in bs:
+            if i.transactions =="Billed":
+                debit+=i.payments
+
+            if i.transactions =="Vendor Credits":
+                credit+=i.payments
+
+            if i.transactions =="Expense":
+                debit+=i.payments
+
+            if i.transactions =="Invoice":
+                debit+=i.payments
+
+        total = credit-debit
+
+        debit1=0
+        credit1=0
+        total1 =0
+        for i in pl:
+            if i.transactions =="Billed":
+                debit1+=i.payments
+
+            if i.transactions =="Vendor Credits":
+                credit1+=i.payments
+
+            if i.transactions =="Expense":
+                debit1+=i.payments
+
+            if i.transactions =="Invoice":
+                debit1+=i.payments
+
+        fdate =""
+        ldate =""
+
+        total1 = credit1-debit1
+
+        context = {'cmp1':cmp1, 'to':to, 'fdate':fdate, 'ldate':ldate, 'bs':bs, 'debit':debit, 'credit':credit, 'total':total,
+            'pl':pl, 'debit1':debit1, 'credit1':credit1, 'total1':total1
+        }
+
+        return render(request,'app1/tbreport.html',context)
+    return redirect('/') 
+
+def tbreport1(request,id):
     if 'uid' in request.session:
         if request.session.has_key('uid'):
             uid = request.session['uid']

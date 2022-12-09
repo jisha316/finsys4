@@ -30,7 +30,7 @@
                         </div>
                     </div>
 
-                    <form action="{% url 'create_mjournal' %}" method="post" enctype="multipart/form-data" class="needs-validation" validate>
+                    <form action="{% url 'create_mjournal' %}" method="post" id="form" enctype="multipart/form-data" class="needs-validation" validate>
                         {% csrf_token %}
                         
                         <div class="row">
@@ -95,77 +95,97 @@
                                                         <th>Contact(INR)</th>
                                                         <th>Debits</th>
                                                         <th>Credits</th>
+                                                        <th></th>
+                                                        <th style="display: none;"></th>
+                                                        <th style="display: none;"></th>
                                                     </tr>
                                                     </thead>
-                                                    <tbody>
-                                                    <tr id='addr0'>
+                                                    <tbody id="items-table-body">
+                                                    <tr>
                                                         <td>1</td>
                                                         <td>
-                                                            <select name='account' id="account" class="form-control" required>
+                                                            <select name='account[]' id="account" class="form-control" required>
                                                                 <option value="" selected disabled required>Select Account</option>
                                                                 {% for a in acc %}
                                                                         <option   value="{{ a.name }}">{{ a.name }} </option>
                                                                 {% endfor %}
                                                             </select>
                                                         </td>
-                                                        <td><input type="text" name='jdesc' id="jdesc1"
+                                                        <td><input type="text" name='jdesc[]' id="jdesc1"
                                                                    placeholder='Enter Description' class="form-control" >
                                                         </td>
-                                                        <td><select name='jcontact' id="jcontact1"
-                                                                   class="form-control" >
-                                                                   <option value="null"  >Select Contact</option>
+                                                        <td>
+                                                            <select name='jcontact[]' id="jcontact1" class="form-control" >
+                                                                <option value="null"  >Select Contact</option>
                                                                 {% for a in cust %}
-                                                                        <option   value="{{ a.firstname }} {{ a.lastname }}">{{ a.firstname }} {{ a.lastname }} </option>
+                                                                    <option   value="{{ a.firstname }} {{ a.lastname }}">{{ a.firstname }} {{ a.lastname }} </option>
                                                                 {% endfor %}
-                    
+                                                                {% for a in vend %}
+                                                                    <option   value="{{ a.firstname }} {{ a.lastname }}">{{ a.firstname }} {{ a.lastname }} </option>
+                                                                {% endfor %}
+                                                            </select>
                                                         </td>
                                                         <td>
-                                                            <input type="number" name='jdebit' id="jdebit1"
-                                                                   class="form-control qty" step="0" min="0"/>
+                                                            <input type="number" name='jdebit[]' id="jdebit1"
+                                                                   class="form-control debit" value="0" step="0" min="0"/>
                                                                    <span id="qtyspan" class="text-muted"></span>
                                                         </td>
-                                                        <td><input type="number" name='jcredit' id="jcredit1"
-                                                                   class="form-control price" step="0.00"
+                                                        <td><input type="number" name='jcredit[]' value="0" id="jcredit1"
+                                                                   class="form-control credit" step="0.00"
                                                                    min="0"/>
                                                         </td>
-                                                        
-                                                        
-                                                        
-                                                    <tr id='addr0'>
+                                                        <td style="display: none;"><input type="number" class="form-control total"></td>
+                                                        <td style="display: none;"><input type="number" class="form-control total1"></td>
+                                                        <td><input type="checkbox" name="record"></td>
+                                                    </tr>    
+                                                    <tr id="#addr0">
                                                         <td>2</td>
                                                         <td>
-                                                            <select name='account1' id="account1" class="form-control" required>
+                                                            <select name='account[]' id="account1" class="form-control" required>
                                                                 <option value="" selected disabled>Select Account</option>
                                                                 {% for a in acc %}
                                                                         <option   value="{{ a.name }}">{{ a.name }} </option>
                                                                 {% endfor %}
                                                             </select>
                                                         </td>
-                                                        <td><input type="text" name='jdesc1' id="jdesc2"
+                                                        <td><input type="text" name='jdesc[]' id="jdesc2"
                                                                    placeholder='Enter Description' class="form-control">
                                                         </td>
-                                                        <td><select name='jcontact1' id="jcontact2"
-                                                                   class="form-control">
-                                                                   <option value="null"  >Select Contact</option>
+                                                        <td>
+                                                            <select name='jcontact[]' id="jcontact2" class="form-control">
+                                                                <option value="null"  >Select Contact</option>
                                                                 {% for a in cust %}
-                                                                        <option   value="{{ a.firstname }} {{ a.lastname }}">{{ a.firstname }} {{ a.lastname }} </option>
+                                                                    <option   value="{{ a.firstname }} {{ a.lastname }}">{{ a.firstname }} {{ a.lastname }} </option>
                                                                 {% endfor %}
-                    
+                                                                {% for a in vend %}
+                                                                    <option   value="{{ a.firstname }} {{ a.lastname }}">{{ a.firstname }} {{ a.lastname }} </option>
+                                                                {% endfor %}
+                                                            </select>
                                                         </td>
                                                         <td>
-                                                            <input type="number" name='jdebit1' id="jdebit2"
-                                                                   class="form-control qty" step="0" min="0"/>
-                                                                   <span id="qtyspan" class="text-muted"></span>
+                                                            <input type="number" name='jdebit[]' value="0" id="jdebit2"
+                                                                   class="form-control debit" step="0" min="0"/>
                                                         </td>
-                                                        <td><input type="number" name='jcredit1' id="jcredit2"
-                                                                   class="form-control price" step="0.00"
+                                                        <td><input type="number" name='jcredit[]' value="0" id="jcredit2"
+                                                                   class="form-control credit" step="0.00"
                                                                    min="0"/>
                                                         </td>
+                                                        <td style="display: none;"><input type="number" class="form-control total"></td>
+                                                        <td style="display: none;"><input type="number" class="form-control total1"></td>
                                                         
-                                                        
+                                                        <td><input type="checkbox" name="record"></td>
                                                     
-                                                    <tr id='addr1'></tr>
+                                                    </tr>
                                                     </tbody>
+                                                    <tr>
+                                                        <td style="border: none;"><a class="btn btn-outline-secondary ml-1" role="button" id="addrow" onclick="add_item_row()">+</a></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td><button type="button" id="rm" class="btn btn-outline-secondary ml-1 delete-row">-</button></td>
+                                                    </tr>
                                                 </table>
                                             </div>
                                         </div>
@@ -185,7 +205,7 @@
                                                                                        name='sub_total'
                                                                                        placeholder='0.00'
                                                                                        class="form-control"
-                                                                                       id="sub_total" />
+                                                                                       id="subtotal" />
                                                         </td>
                                                         <td>
                                                             <input
@@ -206,22 +226,18 @@
                                                                                        />
                                                         </td>
                                                         <td>
-                                                            <input
-                                                            type="number"
-                                                                                       name='total_amount1'
-                                                                                       placeholder='0.00'
-                                                                                       class="form-control"
-                                                                                       id="sub_total" />
+                                                            <input type="number" name='total_amount1' placeholder='0.00' class="form-control"
+                                                            id="sub_total" />
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <th class="text-center"> Difference</th>
-                                                        <td style="align:right;" colspan="2"><input type="number"
-                                                                                       name='differ'
-                                                                                       id="total_amount"
-                                                                                       placeholder='0.00'
-                                                                                       class="form-control"
-                                                                                       /></td>
+                                                        <td><input type="number" name='differ' id="diff" placeholder='0.00'
+                                                            class="form-control diff"/>
+                                                        </td>
+                                                        <td><input type="number" name='differ' id="diff1" placeholder='0.00'
+                                                            class="form-control diff1"/>
+                                                        </td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -258,156 +274,121 @@
             </div>
         </div>
 
-
-
-        <script src="{% static 'assets/plugins/select2/js/select2.min.js' %}"></script>
-        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script>
-            function insertValue() {
-                var select = document.getElementById("select"),
-                    txtVal = document.getElementById("val").value,
-                    newOption = document.createElement("OPTION"),
-                    newOptionval = document.createTextNode(txtVal);
+            $('#date').val(new Date().toJSON().slice(0,10));
+        </script>
 
-                newOption.appendChild(newOptionval);
-                select.insertBefore(newOption, select.lastChild);
+        <script>
+            var item_row_counter = 2
+
+            function add_item_row() {
+                old_item_row_count = item_row_counter
+                item_row_counter++;
+
+                $('#items-table-body >tr:last').clone(true).insertAfter('#items-table-body >tr:last');
+                $('#items-table-body >tr:last input').val('');
+
+                $('#items-table-body >tr:last td')[0].innerHTML = item_row_counter
+                update_amounts($('#items-table-body input[name=jcredit2]:last'));
             }
-        </script>
-        <script>
-            $('.datepicker').pickadate({
-                selectMonths: true,
-                selectYears: true
-            }),
-                $('.timepicker').pickatime()
-        </script>
-        <script>
-            $(function () {
-                $('#date-time').bootstrapMaterialDatePicker({
-                    format: 'YYYY-MM-DD HH:mm'
+
+            function setup_rows() {
+                $("#addrow").click(function(event) {
+                event.preventDefault();
+                add_item_row();
                 });
-                $('#date').bootstrapMaterialDatePicker({
-                    time: false
-                });
-                $('#time').bootstrapMaterialDatePicker({
-                    date: false,
-                    format: 'HH:mm'
-                });
-            });
-        </script>
-        <script type="text/javascript">
-            $(document).ready(function () {
 
-                var current_fs, next_fs, previous_fs; //fieldsets
-                var opacity;
+                for (var i = 0; i <= 4; i++) {
+                    add_item_row();
+                }
+            }
 
-                $(".next").click(function () {
-
-                    current_fs = $(this).parent();
-                    next_fs = $(this).parent().next();
-
-//Add Class Active
-                    $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-
-//show the next fieldset
-                    next_fs.show();
-//hide the current fieldset with style
-                    current_fs.animate({opacity: 0}, {
-                        step: function (now) {
-// for making fielset appear animation
-                            opacity = 1 - now;
-
-                            current_fs.css({
-                                'display': 'none',
-                                'position': 'relative'
-                            });
-                            next_fs.css({'opacity': opacity});
-                        },
-                        duration: 600
+            $(document).ready(function(){
+                $(".delete-row").click(function(){
+                    $("table tbody").find('input[name="record"]').each(function(){
+            	        if($(this).is(":checked")){
+                            $(this).parents("tr").remove();
+                        }
                     });
                 });
+            });   
+        </script>
 
-                $(".previous").click(function () {
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                $('#tab_logic tbody').on('keyup change', function() {
+                    calc();
+                });
 
-                    current_fs = $(this).parent();
-                    previous_fs = $(this).parent().prev();
-
-//Remove class active
-                    $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-
-//show the previous fieldset
-                    previous_fs.show();
-
-//hide the current fieldset with style
-                    current_fs.animate({opacity: 0}, {
-                        step: function (now) {
-// for making fielset appear animation
-                            opacity = 1 - now;
-
-                            current_fs.css({
-                                'display': 'none',
-                                'position': 'relative'
-                            });
-                            previous_fs.css({'opacity': opacity});
-                        },
-                        duration: 600
+                function calc() {
+                    $('#tab_logic tbody tr').each(function() {
+                        var html = $(this).html();
+                        if (html != '') {
+                            var debit = $(this).find('.debit').val();
+                            var credit = $(this).find('.credit').val();
+                        
+                            $(this).find('.total').val(parseFloat(+debit));
+                            $(this).find('.total1').val(parseFloat(+credit));
+                            
+                            calc_total();
+                        }
                     });
-                });
+                }
+                function calc_total() {
+                    total = 0;
+                    total1 = 0;
+                    $('.total').each(function() {
+                        total += parseFloat($(this).val());
+                    });
+                    $('.total1').each(function() {
+                        total1 += parseFloat($(this).val());
+                    });
 
-                $('.radio-group .radio').click(function () {
-                    $(this).parent().find('.radio').removeClass('selected');
-                    $(this).addClass('selected');
-                });
+                    $('#subtotal').val(parseFloat(total.toFixed(2)));
+                    $('#sub_total').val(parseFloat(total1.toFixed(2)));
+                    calc_diff();
+                }
+                function calc_diff() {
+                    $('.subtotal').each(function() {
+                        subtotal += parseFloat($(this).val());
+                    });
+                    $('.sub_total').each(function() {
+                        sub_total += parseFloat($(this).val());
+                    });
 
+                    x=0
+                    if (subtotal === sub_total) {
+                        $('#diff').val(parseFloat(x.toFixed(2)));
+                        $('#diff1').val(parseFloat(x.toFixed(2)));
+                    } else if (subtotal > sub_total) {
+
+                        $('#diff').val(parseFloat(x.toFixed(2)));
+                    } else {
+                    // do something if the first input is less than the secongvgd
+                    }
+                }
                 
-
-            });
-            /*$('#tax').on('change', function () {
-                alert(" INFORMATION \n\n Change saleprice before changing tax.\n Never mind if already done.")
-                tax = parseFloat($('#tax').val());
-                saleprice = parseFloat($('#saleprice').val());
-                if ($("#inclusive").prop('checked') == true) {
-                    taxm = 1 + (tax / 100)
-                    salep = saleprice / taxm
-                    document.getElementById('saleprice').value = salep.toFixed(2)
+            }); 
+        </script>
+        <script>
+            $('#form').submit(function() {
+                var match = $('#jdebit1').text() == $('jcredit2').text();
+                // var id1 = $('#jdebit1').text();
+                // var id2 = $('jcredit2').text();
+                if (match) {
+                    alert('Error, cant do that');
+                    return false;
+                }
+                else
+                {
+                    return true;
                 }
             });
         </script>
-        <script type="text/javascript">
-            function ShowHideDiv(track) {
-                var inventorytrack = document.getElementById("inventorytrack");
-    
-                inventorytrack.style.display = track.checked ? "flex" : "none";
-    
-            }
-        </script>
-
-        <script>
-            const dateInput = document.getElementById('date');
-
-dateInput.value = formatDate();
-
-console.log(formatDate());
-
-function padTo2Digits(num) {
-  return num.toString().padStart(2, '0');
-}
-
-function formatDate(date = new Date()) {
-  return [
-    date.getFullYear(),
-    padTo2Digits(date.getMonth() + 1),
-    padTo2Digits(date.getDate()),
-  ].join('-');
-}
-</script>
-
        
     {% endif %}
-
-
-
-
-
 {% endblock %}
 
 

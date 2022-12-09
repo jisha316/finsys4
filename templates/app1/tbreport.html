@@ -111,18 +111,20 @@ body{
 
             <div class="card radius-15">
                 <div class="card-body">
-                    <form action="" method="post" class="needs-validation" novalidate>
+                    <form action="{% url 'tbreport1' id %}" method="post" class="needs-validation" novalidate>
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-sm-4">
                                 <label style="text-align:left ">Report period</label><br>
-                                <input type="text" name="cust" value="{{cust2}}" hidden>
-                                <select class="form-control" id="filterstyle" onchange="filterDate(this)"
-                                        list="hosting-plan"
-                                        name="reportperiod" type="text">
-                                    <option><span class="bx bx-right-arrow-alt"></span>All dates</option>
-                                    <option><span class="bx bx-right-arrow-alt"></span>Custom</option>
-                                    </select>
+                                
+                                <select class="form-control" id="filterstyle" onchange="filterDate(this)" list="hosting-plan"
+                                name="reportperiod" type="text">
+                            <option><span class="bx bx-right-arrow-alt"></span>All dates</option>
+                            <option><span class="bx bx-right-arrow-alt"></span>Custom</option>
+                            <option><span class="bx bx-right-arrow-alt"></span>Today</option>
+                            <option><span class="bx bx-right-arrow-alt"></span>This month</option>
+                            <option><span class="bx bx-right-arrow-alt"></span>This financial year</option>
+                        </select>
                             </div>
                             <div class="col-sm-4" id="frdate" style="display: none;">
                                 <label for="from">From</label>
