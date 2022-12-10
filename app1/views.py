@@ -15487,7 +15487,7 @@ def accpayables(request):
         ex = expences.objects.filter(cid=cmp1).values(
             'payee').annotate(t1=Sum('grandtotal'))
         pbl = purchasebill.objects.filter(cid=cmp1).values(
-            'vendor_name','date').annotate(t1=Sum('balance_due'),t2=Sum('grand_total'))
+            'vendor_name').annotate(t1=Sum('balance_due'),t2=Sum('grand_total'))
         cre = suplrcredit.objects.filter(cid=cmp1).values(
             'supplier').annotate(t1=Sum('creditamount'))
         op = bills.objects.filter(cid=cmp1, payornot='openbalance').values(
@@ -29265,6 +29265,7 @@ def create_item(request):
                                 intra_st=iintra,
                                 inter_st=iinter,
                                 inventry=iinv,
+                                stockin=istock,
                                 stock=istock,
                                 status=istatus,
                                 cid=cmp1)
@@ -29345,6 +29346,7 @@ def update_item(request, id):
             item.intra_st = request.POST.get('intra_st')
             item.inter_st = request.POST.get('inter_st')
             item.inventry = request.POST.get('invacc')
+            item.stockin = request.POST.get('stock')
             item.stock = request.POST.get('stock')
             item.status = request.POST.get('status')
             item.save()
@@ -30061,30 +30063,38 @@ def update_stock_adjustment(request,id):
 def stocksummary(request):
         cmp1 = company.objects.get(id=request.session["uid"])
 
-        item = itemtable.objects.all()
+        item = itemtable.objects.filter(cid=cmp1)
+        st1=0
+        st2=0
+        st3=0
+        
         for i in item:
-            itemname = i.name
+            if i.stock:
+                st1+=i.stock
+            if i.stockout:
+                st2+=i.stockout
+            st3=st1-st2
 
-            billitm = purchasebill_item.objects.all().filter(items=itemname)
-            qtyin=0
-            for j in billitm :
-                if j.quantity:
-                    qtyin+=j.quantity
+            # billitm = purchasebill_item.objects.all().filter(items=itemname)
+            # qtyin=0
+            # for j in billitm :
+            #     if j.quantity:
+            #         qtyin+=j.quantity
 
-            qtyout=0
-            tot1=0
-            tot2=0
-            debitm1 = purchasedebit1.objects.filter(items=itemname).all()
-            for j in debitm1 :
-                if j.quantity:
-                    tot1+=j.quantity
+            # qtyout=0
+            # tot1=0
+            # tot2=0
+            # debitm1 = purchasedebit1.objects.filter(items=itemname).all()
+            # for j in debitm1 :
+            #     if j.quantity:
+            #         tot1+=j.quantity
 
-            initm1 = invoice_item.objects.filter(product=itemname).all()
-            for j in initm1 :
-                if j.qty:
-                    tot2+=j.qty
+            # initm1 = invoice_item.objects.filter(product=itemname).all()
+            # for j in initm1 :
+            #     if j.qty:
+            #         tot2+=j.qty
 
-            qtyout = tot1+tot2
+            # qtyout = tot1+tot2
 
         qtyin1 = purchasebill_item.objects.filter().aggregate(t2=Sum('quantity'))
 
@@ -30106,7 +30116,7 @@ def stocksummary(request):
    
         # stock = stockadjust.objects.filter(cid=cmp1)
         
-        context = {'item':item,'cmp1':cmp1,'qtyin':qtyin,'qtyin1':qtyin1,'qtyout1':qtyout1,'qtyout':qtyout}
+        context = {'item':item,'cmp1':cmp1,'qtyin1':qtyin1,'qtyout1':qtyout1,'st3':st3}
         return render(request, 'app1/stocksummary.html', context)
         
 @login_required(login_url='regcomp')
@@ -31877,18 +31887,18 @@ def createbill(request):
                     tax=ele[4],amount=ele[5],bill=bll,cid=cmp1)
 
                     itemqty = itemtable.objects.get(name=ele[0],cid=cmp1)
-                    if itemqty.stock != 0:
+                    if itemqty.stockin != 0:
                         temp=0
-                        temp = itemqty.stock 
+                        temp = itemqty.stockin 
                         temp = temp+int(ele[2])
-                        itemqty.stock =temp
+                        itemqty.stockin =temp
                         itemqty.save()
 
-                    elif itemqty.stock == 0:
+                    elif itemqty.stockin == 0:
                         temp=0
-                        temp = itemqty.stock 
+                        temp = itemqty.stockin 
                         temp = temp+int(ele[2])
-                        itemqty.stock =temp
+                        itemqty.stockin =temp
                         itemqty.save()
 
                     itempcst = itemtable.objects.get(name=ele[0],cid=cmp1)
@@ -33042,13 +33052,27 @@ def createpurchasedebit(request):
                     porderAdd,created = purchasedebit1.objects.get_or_create(items = ele[0],hsn=ele[1],quantity=ele[2],price=ele[3],
                     tax=ele[4],total=ele[5],pdebit=pdeb,cid=cmp1)
 
-                    itemqty = itemtable.objects.get(name=ele[0],cid=cmp1)
-                    if itemqty.stock != 0:
+                    itemqty1 = itemtable.objects.get(name=ele[0],cid=cmp1)
+                    if itemqty1.stockin != 0:
                         temp=0
-                        temp = itemqty.stock 
-
+                        temp = itemqty1.stockin
                         temp = temp-int(ele[2])
-                        itemqty.stock =temp
+                        itemqty1.stock =temp
+                        itemqty1.save()
+
+                    itemqty = itemtable.objects.get(name=ele[0],cid=cmp1)
+                    if itemqty.stockout != 0:
+                        temp=0
+                        temp = itemqty.stockout
+                        temp = temp+int(ele[2])
+                        itemqty.stockout =temp
+                        itemqty.save()
+
+                    elif itemqty.stockout == 0:
+                        temp=0
+                        temp = itemqty.stockout 
+                        temp = temp+int(ele[2])
+                        itemqty.stockout =temp
                         itemqty.save()
 
             return redirect('gopurchasedebit')
@@ -33190,6 +33214,44 @@ def editpurchasedebit(request,id):
                 for ele in mapped:
                     created = purchasedebit1.objects.filter(id=ele[6]).update(items = ele[0],hsn = ele[1],quantity=ele[2],price=ele[3],
                     tax=ele[4],total=ele[5])
+
+                    itemqty1 = itemtable.objects.get(name=ele[0],cid=cmp1)
+                
+                    # if int(ele[2]) > int(ele[6].ele[2]):
+                    #     newqn = int(ele[2]) - int(ele[6].ele[2])
+                    #     itemqty1.stock = itemqty1.stock + newqn
+                    #     itemqty1.save()
+
+                    # elif int(ele[2]) < int(ele[6].ele[2]):
+                    #     newqn = int(ele[6].ele[2]) - int(ele[2])
+                    #     itemqty1.stock = itemqty1.stock - newqn
+                    #     itemqty1.save()
+                    # else:
+                    #     pass
+
+
+                    # if itemqty1.stockin != 0:
+                    #     temp= 0
+                    #     temp = itemqty1.stockin 
+
+                    #     temp = temp-int(ele[2])
+                    #     itemqty1.stock =temp
+                    #     itemqty1.save()
+
+                    # itemqty = itemtable.objects.get(name=ele[0],cid=cmp1)
+                    # if itemqty.stockout != 0:
+                    #     temp=0
+                    #     temp = itemqty.stockout
+                    #     temp = temp-int(ele[2])
+                    #     itemqty.stockout =temp
+                    #     itemqty.save()
+
+                    # elif itemqty.stockout == 0:
+                    #     temp=0
+                    #     temp = itemqty.stockout 
+                    #     temp = temp+int(ele[2])
+                    #     itemqty.stockout =temp
+                    #     itemqty.save()
 
             return redirect('gopurchasedebit')
         return render(request,'app1/gopurchasedebit.html',{'cmp1': cmp1})

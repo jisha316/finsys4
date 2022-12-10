@@ -1209,7 +1209,9 @@ class itemtable(models.Model):
     intra_st = models.CharField(max_length=100,null=True)
     inter_st = models.CharField(max_length=100,null=True)
     inventry = models.CharField(max_length=100, default='',null=True,blank=True)
-    stock = models.IntegerField(blank=True,null=True,default='')
+    stock = models.IntegerField(blank=True,null=True,default='0')
+    stockin = models.IntegerField(default='0',blank=True,null=True)
+    stockout = models.IntegerField(default='0',blank=True,null=True)
     status = models.CharField(max_length=100,null=True)
 
 class unittable(models.Model):
@@ -1528,6 +1530,14 @@ class purchasedebit1(models.Model):
     tax = models.CharField(max_length=100,null=True)
     total = models.CharField(max_length=100,null=True)
 
+class item(models.Model):
+    cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
+    debit = models.ForeignKey(purchasedebit, on_delete=models.CASCADE,null=True)
+    bill = models.ForeignKey(purchasebill, on_delete=models.CASCADE,null=True)
+    item = models.CharField(max_length=100,null=True)
+    qty = models.CharField(max_length=100,null=True)
+
+
 class vendor_statment(models.Model):
     vendor = models.CharField(max_length=255, default='')
     cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
@@ -1572,7 +1582,9 @@ class balance_sheet(models.Model):
     date = models.DateField(blank=True,null=True)
     details1 = models.CharField(max_length=255,blank=True,null=True)
     details2= models.CharField(max_length=255,blank=True,default='')
-    payments=models.FloatField(blank=True,null=True)		
+    payments=models.FloatField(blank=True,null=True)	
+
+	
 
 class item_stock(models.Model):
     item = models.CharField(max_length=255, default='')

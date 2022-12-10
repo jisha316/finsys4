@@ -374,11 +374,11 @@
         </script>
         <script>
             $('#form').submit(function() {
-                var match = $('#jdebit1').text() == $('jcredit2').text();
+                var match = $('#subtotal').text() == $('#sub_total').text();
                 // var id1 = $('#jdebit1').text();
                 // var id2 = $('jcredit2').text();
                 if (match) {
-                    alert('Error, cant do that');
+                    alert('Please ensure that the debit and credit are equal');
                     return false;
                 }
                 else

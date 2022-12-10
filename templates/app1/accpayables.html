@@ -90,7 +90,7 @@
                                     <thead>
                                         <tr>
                                             <th class="center font-weight-dark border-dark" style="color: black;">VENDOR NAME</th>
-                                            <th class="center font-weight-dark border-dark" style="color: black;">DATE</th>
+                                            <!-- <th class="center font-weight-dark border-dark" style="color: black;">DATE</th> -->
                                             <th class="center font-weight-dark border-dark" style="color: black;">TRANSACTION TYPE</th>
                                             <!-- <th class="center font-weight-dark border-dark" style="color: black;">0-30</th>
                                             <th class="center font-weight-dark border-dark" style="color: black;">30-60</th>
@@ -156,7 +156,7 @@
                                     {% for pb in pbl %}
                                         <tr class="td" onclick=window.location='{% url "purchase_acctransactions" pb.vendor_name %}';>
                                             <td class="center text-dark">{{ pb.vendor_name }}</td>
-                                            <td class="center text-dark">{{ pb.date }}</td>
+                                            <!-- <td class="center text-dark">{{ pb.date }}</td> -->
                                             <td class="center text-dark">Bill Balance Due</td>
                                             <td class="center text-dark">{{ pb.t2 }}</td>
                                             <!--<td class="center text-dark"></td>
@@ -226,7 +226,7 @@
                                     <thead>
                                     <tr>
                                         <th class="center font-weight-dark border-dark" style="color: black;">TOTAL</th>
-                                        <th class="center font-weight-dark border-dark" style="color: black;"></th>
+                                        <!-- <th class="center font-weight-dark border-dark" style="color: black;"></th> -->
                                         <th class="center font-weight-dark border-dark" style="color: black;"
                                             id="t2"></th>
                                         <th class="center font-weight-dark border-dark" style="color: black;"></th>

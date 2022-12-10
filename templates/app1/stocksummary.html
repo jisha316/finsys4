@@ -97,21 +97,21 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="tb">
                                         {% for i in item %}
                                             <tr>
                                                 <td class="center text-dark">{{ i.name }}</td>
-                                                <td class="center text-dark">{{ qtyin }}</td>  
-                                                <td class="center text-dark">{{ qtyout }}</td>         
-                                                <td class="center text-dark">{{ i.stock }}</td>       
+                                                <td class="center text-dark 1st">{{ i.stockin }}</td>  
+                                                <td class="center text-dark">{{ i.stockout }}</td>         
+                                                <td class="center text-dark">{{i.stock}}</td>       
                                             </tr>
                                         {% endfor %}
                                         <thead>
                                             <tr>
                                                 <th class="center font-weight-dark border-dark" style="color: black;">TOTAL</th>
-                                                <th class="center font-weight-dark border-dark" style="color: black;">{{ qtyin1.t2 }}</th>
-                                                <th class="center font-weight-dark border-dark" style="color: black;">{{ qtyout1 }}</th>
-                                                <th class="center font-weight-dark border-dark" style="color: black;" id="t1">{{ sum }}</th>
+                                                <th class="center font-weight-dark border-dark" style="color: black;" id="t3"></th>
+                                                <th class="center font-weight-dark border-dark" style="color: black;" id="t2"></th>
+                                                <th class="center font-weight-dark border-dark" style="color: black;" id="t1"></th>
                                             </tr>
                                         </thead>
                                     </tbody>
@@ -139,7 +139,33 @@
                 total +=parseInt(salary);
                 $('#t1').text(total)
             });
+            var empsalary1;
+            var total1 = 0;
+            $('td:nth-child(3)').each(function()
+            {
+                salary1 = $(this).html();
+                total1 +=parseInt(salary1);
+                $('#t2').text(total1)
+            });
+            var empsalary2;
+            var total2 = 0;
+            $('td:nth-child(2)').each(function()
+            {
+                salary2 = $(this).html();
+                total2 +=parseInt(salary2);
+                $('#t3').text(total2)
+            });
         });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(function() {
+            $("#tb .1st").each(function() {
+                const val1 = +$(this).text();
+                const val2 = +$(this).next().text();
+                $(this).closest("tr").find(".diff").text(val1 - val2);
+            })
+        })
     </script>
 
 
