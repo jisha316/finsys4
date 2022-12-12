@@ -196,10 +196,15 @@
                             </div>
                             
                             <div class="col-md-3 mt-2">
-                               <label for="">Opening Balance</label>
-                               <div class="d-flex">
-                                <p class="form-control" style="width: 60px;">INR</p>
-                                <input type="number" class="form-control" name="openingbalance">
+                                <label for="">Opening Balance</label>
+                                <div class="d-flex">
+                                    <p class="form-control" style="width: 60px;">INR</p>
+                                    <input type="number" class="form-control" name="openingbalance">
+                               </div>
+                            </div>
+                            <div class="col-md-3 mt-2" style="display: none;">
+                                <label for="">Date</label>
+                                <input type="date" id="date" class="form-control" name="date">
                                </div>
                             </div>
                             <div class="col-md-3 mt-2">
@@ -458,6 +463,11 @@
             </div>
         </div>
     </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $('#date').val(new Date().toJSON().slice(0,10));
+    </script>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>

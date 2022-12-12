@@ -1340,6 +1340,8 @@ class vendor(models.Model):
     sourceofsupply = models.CharField(max_length=100, null=True)
     currency = models.CharField(max_length=100, null=True)
     openingbalance = models.CharField(max_length=100, null=True)
+    opblnc_due = models.CharField(max_length=100, null=True)
+    date = models.DateField(null=True)
     paymentterms = models.CharField(max_length=100, null=True)
     street = models.CharField(max_length=100,null=True)
     city = models.CharField(max_length=100,null=True)
@@ -1480,7 +1482,7 @@ class creditperiod(models.Model):
 class purchasepayment(models.Model):
     pymntid = models.AutoField(('pyid'), primary_key=True)
     cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
-    reference = models.IntegerField(default=1000)
+    reference = models.CharField(max_length=100,blank=True)
     vendor = models.CharField(max_length=100)
     paymentdate = models.DateField(null=True)
     paymentmethod = models.CharField(max_length=100,null=True)
@@ -1496,7 +1498,7 @@ class purchasepayment1(models.Model):
     billno = models.CharField(max_length=100,null=True)
     billamount = models.CharField(max_length=100,null=True)
     duedate = models.CharField(max_length=100,null=True)
-    amountdue = models.CharField(max_length=100,null=True)
+    amountdue = models.FloatField(null=True)
     payments = models.CharField(max_length=100,null=True)
     
 class paymentmethod(models.Model):
@@ -1534,8 +1536,12 @@ class item(models.Model):
     cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
     debit = models.ForeignKey(purchasedebit, on_delete=models.CASCADE,null=True)
     bill = models.ForeignKey(purchasebill, on_delete=models.CASCADE,null=True)
-    item = models.CharField(max_length=100,null=True)
-    qty = models.CharField(max_length=100,null=True)
+    items = models.CharField(max_length=100,null=True)
+    date = models.DateField(null=True)
+    qty = models.IntegerField(null=True)
+    transactions = models.CharField(max_length=100,null=True)
+    details = models.CharField(max_length=100,null=True)
+    details1 = models.CharField(max_length=100,blank=True,default='')
 
 
 class vendor_statment(models.Model):

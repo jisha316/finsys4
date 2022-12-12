@@ -29360,7 +29360,7 @@ def gomjoural(request):
     try:
         cmp1 = company.objects.get(id=request.session['uid'])
         mj = mjournal.objects.filter(cid=cmp1)
-        return render(request,'app1/mjournal.html',{'mj':mj})
+        return render(request,'app1/mjournal.html',{'mj':mj,'cmp1':cmp1})
     except:
         return redirect('gomjoural')    
 
@@ -29400,16 +29400,17 @@ def create_mjournal(request):
                         cid=cmp1)
 
         # if subtotal == subtotal1:
-        mjrnl1.save()
+        #     mjrnl1.save()
         # else:    
-            # messages.info( request, 'Please ensure that the debit and credit are equal')
+        #     messages.info( request, 'Please ensure that the debit and credit are equal')
 
+        mjrnl1.save()
         acc = request.POST.getlist('account[]')
         desc = request.POST.getlist('jdesc[]')
         cont = request.POST.getlist('jcontact[]')
         deb = request.POST.getlist('jdebit[]')
         cred = request.POST.getlist('jcredit[]')
-
+        
         mj=mjournal.objects.get(id=mjrnl1.id)
 
         if len(acc)==len(desc)==len(cont)==len(deb)==len(cred) and acc and desc and cont and deb and cred:
@@ -29421,7 +29422,6 @@ def create_mjournal(request):
 
             return render(request, 'app1/add_mjournal.html',{'cmp1':cmp1})                        
         return redirect('gomjoural')
-    return render(request,'app1/add_mjournal.html')
          
 
 @login_required(login_url='regcomp')
@@ -30194,6 +30194,43 @@ def stocksummary1(request):
         
         context = {'item':item,'cmp1':cmp1,'qtyin1':qtyin1,'qtyout1':qtyout1}
         return render(request, 'app1/stocksummary.html', context)
+
+def streport(request,id):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+
+        toda = date.today()
+        tod = toda.strftime("%Y-%m-%d")
+
+        to=toda.strftime("%d-%m-%Y")
+
+        acc = item.objects.filter(items=id,cid=cmp1)
+
+        debit=0
+        credit=0
+        total =0
+
+        for i in acc :
+            if i.transactions =="Billed":
+                debit+=i.qty
+
+            if i.transactions =="Vendor Credits":
+                credit+=i.qty
+
+            if i.transactions =="Invoice":
+                credit+=i.qty
+
+        fdate =""
+        ldate =""
+
+        total = credit-debit
+        context = {'acc':acc, 'cmp1':cmp1, 'to':to, 'fdate':fdate, 'ldate':ldate, 'debit':debit, 'credit':credit, 'total':total}
+        return render(request, 'app1/streport.html', context)
+    return redirect('/')  
         
 @login_required(login_url='regcomp')
 def stockvaluation1(request):
@@ -30607,6 +30644,8 @@ def createvendor(request):
             supply=request.POST['sourceofsupply']
             currency=request.POST['currency']
             balance=request.POST['openingbalance']
+            due=request.POST['openingbalance']
+            date=request.POST['date']
             payment=request.POST['paymentterms']
             street=request.POST['street']
             city=request.POST['city']
@@ -30619,16 +30658,11 @@ def createvendor(request):
             shippincode=request.POST['shippincode']
             shipcountry=request.POST['shipcountry']
             
-            vndr = vendor(title=title, firstname=first_name,
-                            lastname=last_name, companyname= cmpnm,
-                            gsttype=gsttype, gstin=gstin, 
-                            panno=panno, email=email,sourceofsupply=supply,currency=currency,
-                            website=website, mobile=mobile,openingbalance=balance,
-                            street=street, city=city, state=state,paymentterms=payment,
-                            pincode=pincode, country=country,
-                            shipstreet=shipstreet, shipcity=shipcity,
-                            shipstate=shipstate,
-                            shippincode=shippincode, shipcountry=shipcountry,cid=cmp1)
+            vndr = vendor(title=title, firstname=first_name, lastname=last_name, companyname= cmpnm, gsttype=gsttype, gstin=gstin, 
+                        panno=panno, email=email,sourceofsupply=supply,currency=currency, website=website, mobile=mobile, date=date,
+                        openingbalance=balance,opblnc_due=due, street=street, city=city, state=state, paymentterms=payment,
+                        pincode=pincode, country=country, shipstreet=shipstreet, shipcity=shipcity, shipstate=shipstate,
+                        shippincode=shippincode, shipcountry=shipcountry,cid=cmp1)
 
             vndr.save()
 
@@ -30804,6 +30838,8 @@ def editvendor(request,id):
             vndr.sourceofsupply=request.POST['sourceofsupply']
             vndr.currency=request.POST['currency']
             vndr.openingbalance=request.POST['openingbalance']
+            vndr.opblnc_due=request.POST['openingbalance']
+            vndr.date=request.POST['date']
             vndr.paymentterms=request.POST['paymentterms']
             vndr.street=request.POST['street']
             vndr.city=request.POST['city']
@@ -31878,6 +31914,17 @@ def createbill(request):
             amount = request.POST.getlist("amount[]")
 
             bll=purchasebill.objects.get(billid=billed.billid)
+            
+            dl=billed.bill_no
+            ref=billed.reference
+            dt=billed.date
+
+            if len(items)==len(quantity) and items and quantity:
+                mapped=zip(items,quantity)
+                mapped=list(mapped)
+                for ele in mapped:
+                    billAdd,created = item.objects.get_or_create(items = ele[0],qty = ele[1],transactions='Billed',details=dl,
+                    date=dt,details1=ref,bill=bll,cid=cmp1)
 
             if len(items)==len(hsn)==len(quantity)==len(rate)==len(tax)==len(amount) and items and hsn and quantity and rate and tax and amount:
                 mapped=zip(items,hsn,quantity,rate,tax,amount)
@@ -31899,6 +31946,20 @@ def createbill(request):
                         temp = itemqty.stockin 
                         temp = temp+int(ele[2])
                         itemqty.stockin =temp
+                        itemqty.save()
+
+                    if itemqty.stock != 0:
+                        temp=0
+                        temp = itemqty.stock
+                        temp = temp+int(ele[2])
+                        itemqty.stock =temp
+                        itemqty.save()
+
+                    elif itemqty.stock == 0:
+                        temp=0
+                        temp = itemqty.stock
+                        temp = temp+int(ele[2])
+                        itemqty.stock =temp
                         itemqty.save()
 
                     itempcst = itemtable.objects.get(name=ele[0],cid=cmp1)
@@ -32115,6 +32176,17 @@ def editpurchasebill(request,id):
             bitmid = request.POST.getlist("id[]")
 
             billid=purchasebill.objects.get(billid=pbill.billid,cid=cmp1)
+
+            dl=pbill.bill_no
+            ref=pbill.reference
+            dt=pbill.date
+
+            if len(items)==len(quantity)==len(bitmid) and items and quantity and bitmid:
+                mapped=zip(items,quantity,bitmid)
+                mapped=list(mapped)
+                for ele in mapped:
+                    created = item.objects.filter(id=ele[2]).update(items = ele[0],qty = ele[1],transactions='Billed',details=dl,
+                    date=dt,details1=ref)
 
             if len(items)==len(hsn)==len(quantity)==len(rate)==len(tax)==len(amount)==len(bitmid) and items and hsn and quantity and rate and tax and amount and bitmid:
                 mapped=zip(items,hsn,quantity,rate,tax,amount,bitmid)
@@ -32541,20 +32613,20 @@ def getbilldata(request):
 
         venopenbl = vendor.objects.get(firstname=a,lastname=b,cid =cmp1)
 
-        if venopenbl.opening_balance != 0.0:
+        if venopenbl.openingbalance != 0.0:
 
             vend1 = vendor.objects.get(firstname=a,lastname=b,cid =cmp1)
-
-            opb = vend1.opening_balance
+            date = vend1.date
+            opb = vend1.openingbalance
             print(opb )
-            obdue = vend1.op_balance_due
+            obdue = vend1.opblnc_due
 
             
 
         x_data = list(billitm)
         vd= list(venobject)
         
-        return JsonResponse({"status":" not","invitem":x_data,"vd":vd,'opb':opb,'obdue':obdue,})
+        return JsonResponse({"status":" not","billitm":x_data,"ct":vd,'opb':opb,'obdue':obdue,'date':date})
 
         # billitm = purchasebill.objects.values().filter(vendor_name=id)
         # x_data = list(billitm)
@@ -32582,7 +32654,8 @@ def addpurchasepymnt(request):
         vndr = vendor.objects.filter(cid=cmp1)
         pymt = paymentmethod.objects.filter(cid=cmp1)
         acc = accounts1.objects.filter(cid=cmp1,acctype='Cash')
-        context = {'cmp1':cmp1,'vndr':vndr,'pymt':pymt,'acc':acc}
+        acc1 = accounts1.objects.filter(cid=cmp1,acctype='Bank')
+        context = {'cmp1':cmp1,'vndr':vndr,'pymt':pymt,'acc':acc,'acc1':acc1}
         return render(request,'app1/addpurchasepymnt.html',context)
     return redirect('/')
 
@@ -32655,8 +32728,17 @@ def createpurchasepymnt(request):
                 mapped=zip(billdate,billno,billamount,duedate,amountdue,payments)
                 mapped=list(mapped)
                 for ele in mapped:
-                    billAdd,created = purchasepayment1.objects.get_or_create(billdate = ele[0],billno=ele[1],billamount=ele[2],
-                    duedate=ele[3],amountdue=ele[4],payments=ele[5],pymnt=pyitm,cid=cmp1)
+                    billAdd,created = purchasepayment1.objects.get_or_create(
+                        billdate = ele[0],
+                        billno=ele[1],
+                        billamount=ele[2],
+                        duedate=ele[3],
+                        amountdue= int(ele[4]) - int(ele[5]),
+                        payments=ele[5],
+                        pymnt=pyitm,
+                        cid=cmp1
+                    )
+
 
             paymentamount = float(request.POST['paymentamount'])
             accont = accounts1.objects.get(
@@ -32680,19 +32762,37 @@ def createpurchasepymnt(request):
             except:
                 pass
             # 
-            pymtbill = purchasepayment1.objects.filter()               
-            try:
-                for i in pymtbill:
-                    if purchasebill.objects.get(bill_no=i.billno) and i.billno != 'undefined':
+
+            paymetitem = purchasepayment1.objects.filter()
+        
+            pymnt1.save()
+
+            x = pymnt1.vendor.split()
+            x.append(" ")
+            a = x[0]
+            b = x[1]
+            if x[2] is not None:
+                b = x[1] + " " + x[2]
+
+            for i in paymetitem:
+                if i.billno != "Vendor Opening Balance":
+                    if purchasebill.objects.get(bill_no=i.billno,cid=cmp1) and i.billno != 'undefined':
                         print(depositeto)
                         pbl = purchasebill.objects.get(bill_no=i.billno)
                         pbl.amtrecvd = int(pbl.amtrecvd) + int(i.payments)
-                        pbl.balance_due = float(i.amountdue) - float(i.payments)
+                        pbl.balance_due = float(i.amountdue)
+                        # pbl.balance_due = float(i.amountdue) - float(i.payments)
                         if pbl.balance_due == 0.0:
                             pbl.status = "Paid"
                         pbl.save()
-            except:
-                pass
+
+                if i.billno == "Vendor Opening Balance":            
+                    if vendor.objects.get(firstname=a,lastname= b , cid=cmp1) and i.billno != 'undefined': 
+                        vndr=vendor.objects.get(firstname=a,lastname= b , cid=cmp1)
+                        vndr.opblnc_due = float(i.amountdue)
+                        # vndr.opnbalance_status = "Paid"
+                        vndr.save()
+                        
             return redirect('gopurchasepymnt')
         else:
             return redirect('gopurchasepymnt')
@@ -32861,6 +32961,28 @@ def payment_method(request):
         return render(request,'app1/addpurchasepymnt.html',{'cmp1':cmp1})
     return redirect('/')
 
+def itemdata(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        id = request.GET.get('id')
+
+        toda = date.today()
+        tod = toda.strftime("%Y-%m-%d")
+        # to = toda.strftime("%d-%m-%Y")
+        item = itemtable.objects.get(name=id,cid=cmp1)
+        print(item)
+        hsn = item.hsn
+        qty = item.stock
+        price = item.purchase_cost
+        gst = item.intra_st
+        sgst = item.inter_st
+        return JsonResponse({"status":" not",'hsn':hsn,'qty':qty,'price':price,'gst':gst,'sgst':sgst})
+    return redirect('/')
+
 def gopurchasedebit(request):
     if 'uid' in request.session:
         if request.session.has_key('uid'):
@@ -32885,28 +33007,6 @@ def addpurchasedebit(request):
         context = {'cmp1': cmp1,'vndr':vndr,'item':item,'pbill':pbill} 
         return render(request,'app1/addpurchasedebit.html',context)
     return redirect('gopurchasedebit') 
-
-def itemdata(request):
-    if 'uid' in request.session:
-        if request.session.has_key('uid'):
-            uid = request.session['uid']
-        else:
-            return redirect('/')
-        cmp1 = company.objects.get(id=request.session['uid'])
-        id = request.GET.get('id')
-
-        toda = date.today()
-        tod = toda.strftime("%Y-%m-%d")
-        # to = toda.strftime("%d-%m-%Y")
-        item = itemtable.objects.get(name=id,cid=cmp1)
-        print(item)
-        hsn = item.hsn
-        qty = item.stock
-        price = item.purchase_cost
-        gst = item.intra_st
-        sgst = item.inter_st
-        return JsonResponse({"status":" not",'hsn':hsn,'qty':qty,'price':price,'gst':gst,'sgst':sgst})
-    return redirect('/')
 
 def createpurchasedebit(request):
     if 'uid' in request.session:
@@ -33045,6 +33145,17 @@ def createpurchasedebit(request):
 
             pdeb=purchasedebit.objects.get(pdebitid=pdebit.pdebitid)
 
+            dl=pdebit.debit_no
+            dt=pdebit.debitdate
+            ts="Vendor Credits"
+
+            if len(items)==len(quantity) and items and quantity:
+                mapped=zip(items,quantity)
+                mapped=list(mapped)
+                for ele in mapped:
+                    pAdd,created = item.objects.get_or_create(items = ele[0],qty = ele[1],transactions=ts,details=dl,
+                    date=dt,debit=pdeb,cid=cmp1)
+
             if len(items)==len(hsn)==len(quantity)==len(price)==len(tax)==len(total) and items and hsn and quantity and price and tax and total:
                 mapped=zip(items,hsn,quantity,price,tax,total)
                 mapped=list(mapped)
@@ -33053,9 +33164,9 @@ def createpurchasedebit(request):
                     tax=ele[4],total=ele[5],pdebit=pdeb,cid=cmp1)
 
                     itemqty1 = itemtable.objects.get(name=ele[0],cid=cmp1)
-                    if itemqty1.stockin != 0:
+                    if itemqty1.stock != 0:
                         temp=0
-                        temp = itemqty1.stockin
+                        temp = itemqty1.stock
                         temp = temp-int(ele[2])
                         itemqty1.stock =temp
                         itemqty1.save()

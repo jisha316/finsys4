@@ -8,12 +8,13 @@
         #modal1 {
             margin-left: 660px;
             margin-top: -30px;
-            /* margin-top: 392px; */
+        }
+        .tr{
+            cursor: pointer;
         }
     </style>
 
     <div class="page-content">
-        <!--breadcrumb-->
         <div class="card radius-15">
             <div class="card-body">
                 <div class="card-title">
@@ -99,7 +100,7 @@
                                     </thead>
                                     <tbody id="tb">
                                         {% for i in item %}
-                                            <tr>
+                                            <tr class="tr" onclick="window.location='streport/{{ i.name }} ';">
                                                 <td class="center text-dark">{{ i.name }}</td>
                                                 <td class="center text-dark 1st">{{ i.stockin }}</td>  
                                                 <td class="center text-dark">{{ i.stockout }}</td>         
