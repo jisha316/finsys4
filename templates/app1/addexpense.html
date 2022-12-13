@@ -30,8 +30,12 @@
                             <label for="">Expense Account</label>
                             <div class="d-flex">
                                 <select class="form-control" name="expenseaccount">
-                                    <option selected disabled>Choose..</option>
+                                    <option selected disabled>Expenses</option>
                                     {% for a in acc %}
+                                        <option value="a.name">{{a.name}}</option>
+                                    {% endfor %}
+                                    <option disabled>Other Expenses</option>
+                                    {% for a in acc2 %}
                                         <option value="a.name">{{a.name}}</option>
                                     {% endfor %}
                                     <!-- <option value="Advertising and Marketing">Advertising and Marketing</option>
@@ -49,10 +53,7 @@
                                     <option value="Miscellaneous Expenses">Miscellaneous Expenses</option>
                                     <option value="Printing And Stationary">Printing And Stationary</option> -->
                                 </select>
-                                <a href="#">
-                                    <button type="button" class="btn btn-outline-secondary ml-1" 
-                                    data-target="#newaccmodelbank" data-toggle="modal">+</button>
-                                </a>
+                                <a role="button" class="btn btn-outline-secondary ml-1" data-target="#newaccount" data-toggle="modal">+</a>
                             </div>   
                         </div>
                         <div class="col-md-3 mt-2">
@@ -213,7 +214,7 @@
                     </div>
                 </form>
 
-                <div class="modal fade" id="newaccmodelbank">
+                <div class="modal fade" id="newaccount">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content" style="background-color: #213b52;">
                             <div class="modal-header">
@@ -224,13 +225,13 @@
                             </div>
                             <div class="modal-body">
                                 <div class="card p-3 m-3">
-                                    <form method="post" action="{% url 'createaccount' %}">
+                                    <form method="post" action="{% url 'createaccount2' %}">
                                         {% csrf_token %}
                                         <div class="row mt-2 mb-2">
                                             <div class="col-md-6">
                                                 <label for="acctyp">Account Type</label>
                                                 <select name="acctype" id="select1" class="custom-select-md form-control w-100">
-                                                    <option >Account Receivable</option>
+                                                    <!-- <option >Account Receivable</option>
                                                     <option>Current Assets</option>
                                                     <option>Bank</option>
                                                     <option>Fixed Assets</option>
@@ -242,17 +243,17 @@
                                                     <option>Equity</option>
                                                     <option>Income</option>
                                                     <option>Other Incomes</option>
-                                                    <option>Cost Of Goods Sold</option>
+                                                    <option>Cost Of Goods Sold</option> -->
                                                     <option>Expenses</option>
                                                     <option>Other Expenses</option>
-                                                    <option>Undepposited Funds</option>
+                                                    <!-- <option>Undepposited Funds</option>
                                                     <option>Stock(New)</option>
-                                                    <option>Cash</option>
+                                                    <option>Cash</option> -->
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="name">*Name</label>
-                                                <input name="name" id="name" required
+                                                <label>* Name</label>
+                                                <input name="name" id="name" placeholder="Account Name" required
                                                        class="custom-select-md form-control w-100"> 
                                             </div>
                                             
@@ -260,12 +261,12 @@
                                         <div class="row mt-2 mb-2">
                                             <div class="col-md-6 mt-2">
                                                 <label for="balance">Credit</label>
-                                                <input type="text" name="balance" id="balance"
+                                                <input type="number" name="balance" id="balance" placeholder="Credit Amount"
                                                        class="form-control" >
                                             </div>
                                             <div class="col-md-6 mt-2">
                                                 <label for="balance">Debit</label>
-                                                <input type="text" name="dbbalance" id="balance"
+                                                <input type="number" name="dbbalance" id="balance" placeholder="Debit Amount"
                                                        class="form-control">
                                             </div>
                                         </div>
@@ -806,7 +807,7 @@
                                                     <div class="col-md-12 mt-3">
                                                         <div class="form-row">
                                                             <label for="street">Street</label>
-                                                            <textarea class="form-control street" id="street" name="street"></textarea>
+                                                            <textarea class="form-control street" id="street1" name="street"></textarea>
                                                             <div class="invalid-feedback">Please provide a valid Street</div>
                                                         </div>
                                                     </div>
@@ -815,14 +816,14 @@
                                                     <div class="col-md-6 mt-3">
                                                         <div class="form-row">
                                                             <label for="city">City</label>
-                                                            <input type="text" class="form-control" id="city" name="city" placeholder="City">
+                                                            <input type="text" class="form-control" id="city1" name="city" placeholder="City">
                                                             <div class="invalid-feedback">Please provide a valid City</div>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mt-3">
                                                         <div class="form-row">
                                                             <label for="state">State</label>
-                                                            <select type="text" class="form-control" id="state" name="state">
+                                                            <select type="text" class="form-control" id="state1" name="state">
                                                                 <option value="" selected>Choose</option>
                                                                 <option value="Andaman and Nicobar Islads">Andaman and Nicobar Islads
                                                                 </option>
@@ -872,7 +873,7 @@
                                                     <div class="col-md-6 mt-3">
                                                         <div class="form-row">
                                                             <label for="pinco">Pin Code</label>
-                                                            <input type="text" class="form-control" id="pinco"
+                                                            <input type="text" class="form-control" id="pinco1"
                                                                    name="pincode"
                                                                    placeholder="PIN code">
                                                             <div class="invalid-feedback">Please provide a valid Pin Code</div>
@@ -881,7 +882,7 @@
                                                     <div class="col-md-6 mt-3">
                                                         <div class="form-row">
                                                             <label for="country">Country</label>
-                                                            <input type="text" class="form-control" id="country"
+                                                            <input type="text" class="form-control" id="country1"
                                                                    name="country"
                                                                    placeholder="Country">
                                                             <div class="invalid-feedback">Please provide a valid Country</div>
@@ -893,16 +894,16 @@
                                                 <div class="row">
                                                     <div class="col-md-12 d-flex">
                                                         <h5>Shipping Address</h5>
-                                                        <input class="ml-4 mt-2 ml-2" type="checkbox" onclick="poppins()" id="okay"
-                                                               name="okay">
-                                                        <label class="ml-2 mt-1 ml-2" for="okay">Same As Billing Address</label>
+                                                        <input class="ml-4 mt-2 ml-2" type="checkbox" onclick="poppins1()" id="okay1"
+                                                               name="okay1">
+                                                        <label class="ml-2 mt-1 ml-2" for="okay1">Same As Billing Address</label>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-12 mt-3">
                                                         <div class="form-row">
                                                             <label for="shipstreet">Street</label>
-                                                            <textarea class="form-control" id="shipstreet" name="shipstreet"></textarea>
+                                                            <textarea class="form-control" id="shipstreet1" name="shipstreet"></textarea>
                                                             <div class="invalid-feedback">Please provide a valid Street</div>
                                                         </div>
                                                     </div>
@@ -911,7 +912,7 @@
                                                     <div class="col-md-6 mt-3">
                                                         <div class="form-row">
                                                             <label for="shipcity">City</label>
-                                                            <input type="text" class="form-control" id="shipcity"
+                                                            <input type="text" class="form-control" id="shipcity1"
                                                                    name="shipcity"
                                                                    placeholder="City">
                                                             <div class="invalid-feedback">Please provide a valid City</div>
@@ -921,7 +922,7 @@
                                                         <div class="form-row">
                                                             <label for="shipstate">State</label>
                                                             <select type="text" class="form-control" id="plosu" name="shipstate">
-                                                                <option id="shipst" selected>Choose</option>
+                                                                <option id="shipst1" selected>Choose</option>
                                                                 <option value="Andaman and Nicobar Islads">Andaman and Nicobar Islads
                                                                 </option>
                                                                 <option value="Andhra Predhesh">Andhra Predhesh</option>
@@ -970,7 +971,7 @@
                                                     <div class="col-md-6 mt-3">
                                                         <div class="form-row">
                                                             <label for="shippinco">Pin Code</label>
-                                                            <input type="text" class="form-control" id="shippinco"
+                                                            <input type="text" class="form-control" id="shippinco1"
                                                                    name="shippincode"
                                                                    placeholder="PIN code">
                                                             <div class="invalid-feedback">Please provide a valid Pin Code</div>
@@ -979,7 +980,7 @@
                                                     <div class="col-md-6 mt-3">
                                                         <div class="form-row">
                                                             <label for="shipcountry">Country</label>
-                                                            <input type="text" class="form-control" id="shipcountry"
+                                                            <input type="text" class="form-control" id="shipcountry1"
                                                                    name="shipcountry"
                                                                    placeholder="Country">
                                                             <div class="invalid-feedback">Please provide a valid Country</div>
@@ -991,7 +992,7 @@
                                         <div class="row mt-3">
                                             <div class="col">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck">
+                                                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
                                                     <label>Agree to terms and conditions</label>
                                                     <div class="invalid-feedback">You must agree before submitting.</div>
                                                 </div>
@@ -1035,6 +1036,23 @@
                 document.getElementById('shipstate').value = '';
                 document.getElementById('shippinco').value = '';
                 document.getElementById('shipcountry').value = '';
+            }
+        }
+        function poppins1() {
+            var chkbtn = document.getElementById('okay1');
+            if (chkbtn.checked == true) {
+                document.getElementById('shipstreet1').value = document.getElementById('street1').value;
+                document.getElementById('shipcity1').value = document.getElementById('city1').value;
+                document.getElementById('shippinco1').value = document.getElementById('pinco1').value;
+                document.getElementById('shipcountry1').value = document.getElementById('country1').value;
+                document.getElementById('shipst1').value = document.getElementById('state1').value;
+                document.getElementById('shipst1').innerHTML = document.getElementById('state1').value;
+            } else {
+                document.getElementById('shipstreet1').value = '';
+                document.getElementById('shipcity1').value = '';
+                document.getElementById('shipstate1').value = '';
+                document.getElementById('shippinco1').value = '';
+                document.getElementById('shipcountry1').value = '';
             }
         }
     </script>

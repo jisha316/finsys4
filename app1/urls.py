@@ -754,6 +754,8 @@ urlpatterns = [
     re_path(r'^demo$', views.demo, name='demo'),
     re_path(r'^itemdata$', views.itemdata, name='itemdata'),
     re_path(r'^payment_method$', views.payment_method, name='payment_method'),
+    re_path(r'^createaccount1$', views.createaccount1, name='createaccount1'),
+    re_path(r'^createaccount2$', views.createaccount2, name='createaccount2'),
 
     re_path(r'^bnnk',views.bnnk,name='bnnk'),
     re_path(r'^bnk1/(?P<pk>\d+)$',views.bnk1,name='bnk1'),

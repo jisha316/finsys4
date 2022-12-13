@@ -31287,6 +31287,46 @@ def create_item3(request):
         return render(request,'app1/addpurchasedebit.html')
     return redirect('/') 
 
+def getdata2(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        id = request.GET.get('id')
+        x = id.split()
+        x.append(" ")
+        a = x[0]
+        b = x[1]
+        if x[2] is not None:
+            b = x[1] + " " + x[2]
+            custobject = customer.objects.get(firstname=a, lastname=b, cid=cmp1)
+            list = []
+            dict = {'customerid': custobject.customerid, 'title': custobject.title, 'firstname': custobject.firstname,
+                    'lastname': custobject.lastname, 'company': custobject.company, 'location': custobject.location,
+                    'gsttype': custobject.gsttype,
+                    'gstin': custobject.gstin, 'panno': custobject.panno, 'email': custobject.email,
+                    'website': custobject.website,
+                    'mobile': custobject.mobile, 'street': custobject.street, 'city': custobject.city,
+                    'state': custobject.state,
+                    'pincode': custobject.pincode, 'country': custobject.country}
+            list.append(dict)
+        else:
+            custobject = customer.objects.get(firstname=a, lastname=b, cid=cmp1)
+            list = []
+            dict = {'customerid': custobject.customerid, 'title': custobject.title, 'firstname': custobject.firstname,
+                    'lastname': custobject.lastname, 'company': custobject.company, 'location': custobject.location,
+                    'gsttype': custobject.gsttype,
+                    'gstin': custobject.gstin, 'panno': custobject.panno, 'email': custobject.email,
+                    'website': custobject.website,
+                    'mobile': custobject.mobile, 'street': custobject.street, 'city': custobject.city,
+                    'state': custobject.state,
+                    'pincode': custobject.pincode, 'country': custobject.country}
+            list.append(dict)
+        return JsonResponse(json.dumps(list), content_type="application/json", safe=False)
+    return redirect('/')
+
 def getvendordata(request):
     if 'uid' in request.session:
         if request.session.has_key('uid'):
@@ -31326,6 +31366,28 @@ def getvendordata(request):
             list.append(dict)
         return JsonResponse(json.dumps(list), content_type="application/json", safe=False)
     return redirect('getvendordata')
+
+def itemdata(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        id = request.GET.get('id')
+
+        toda = date.today()
+        tod = toda.strftime("%Y-%m-%d")
+        # to = toda.strftime("%d-%m-%Y")
+        item = itemtable.objects.get(name=id,cid=cmp1)
+        print(item)
+        hsn = item.hsn
+        qty = item.stock
+        price = item.purchase_cost
+        gst = item.intra_st
+        sgst = item.inter_st
+        return JsonResponse({"status":" not",'hsn':hsn,'qty':qty,'price':price,'gst':gst,'sgst':sgst})
+    return redirect('/')
 
 def getperiod(request):
     id = request.GET.get('id')
@@ -31424,7 +31486,6 @@ def createpurchaseorder(request):
             porder.puchaseorder_no = int(porder.puchaseorder_no) + porder.porderid
             porder.save()
 
-
             items = request.POST.getlist("items[]")
             hsn = request.POST.getlist("hsn[]")
             quantity = request.POST.getlist("quantity[]")
@@ -31440,16 +31501,6 @@ def createpurchaseorder(request):
                 for ele in mapped:
                     porderAdd,created = purchaseorder_item.objects.get_or_create(items = ele[0],hsn = ele[1],quantity=ele[2],rate=ele[3],
                     tax=ele[4],amount=ele[5],porder=prid,cid=cmp1)
-
-                    itemqty = itemtable.objects.get(name=ele[0],cid=cmp1)
-                    if itemqty.stock != 0:
-                        temp=0
-                        temp = itemqty.stock 
-
-                        temp = temp-int(ele[2])
-                        itemqty.stock =temp
-                        itemqty.save()
-
             return redirect('gopurchaseorder')
         return render(request,'app1/gopurchaseorder.html',{'cmp1': cmp1})
     return redirect('/') 
@@ -31612,6 +31663,7 @@ def convertbilled(request,id):
         upd.vendor_name  = pordr.vendor_name
         upd.billing_address = pordr.billing_address
         upd.date = pordr.date
+        upd.sourceofsupply= pordr.sourceofsupply
         upd.destiofsupply= pordr.destiofsupply
         upd.branch= pordr.branch
         upd.reference= pordr.puchaseorder_no
@@ -32259,46 +32311,6 @@ def bill_billed(request):
     pbill = purchasebill.objects.filter(status='Billed').all()
     return render(request,'app1/gobilling.html',{'cmp1':cmp1,'pbill':pbill})
 
-def getdata2(request):
-    if 'uid' in request.session:
-        if request.session.has_key('uid'):
-            uid = request.session['uid']
-        else:
-            return redirect('/')
-        cmp1 = company.objects.get(id=request.session['uid'])
-        id = request.GET.get('id')
-        x = id.split()
-        x.append(" ")
-        a = x[0]
-        b = x[1]
-        if x[2] is not None:
-            b = x[1] + " " + x[2]
-            custobject = customer.objects.get(firstname=a, lastname=b, cid=cmp1)
-            list = []
-            dict = {'customerid': custobject.customerid, 'title': custobject.title, 'firstname': custobject.firstname,
-                    'lastname': custobject.lastname, 'company': custobject.company, 'location': custobject.location,
-                    'gsttype': custobject.gsttype,
-                    'gstin': custobject.gstin, 'panno': custobject.panno, 'email': custobject.email,
-                    'website': custobject.website,
-                    'mobile': custobject.mobile, 'street': custobject.street, 'city': custobject.city,
-                    'state': custobject.state,
-                    'pincode': custobject.pincode, 'country': custobject.country}
-            list.append(dict)
-        else:
-            custobject = customer.objects.get(firstname=a, lastname=b, cid=cmp1)
-            list = []
-            dict = {'customerid': custobject.customerid, 'title': custobject.title, 'firstname': custobject.firstname,
-                    'lastname': custobject.lastname, 'company': custobject.company, 'location': custobject.location,
-                    'gsttype': custobject.gsttype,
-                    'gstin': custobject.gstin, 'panno': custobject.panno, 'email': custobject.email,
-                    'website': custobject.website,
-                    'mobile': custobject.mobile, 'street': custobject.street, 'city': custobject.city,
-                    'state': custobject.state,
-                    'pincode': custobject.pincode, 'country': custobject.country}
-            list.append(dict)
-        return JsonResponse(json.dumps(list), content_type="application/json", safe=False)
-    return redirect('/')
-
 def goexpenses(request):
     if 'uid' in request.session:
         if request.session.has_key('uid'):
@@ -32321,7 +32333,8 @@ def addexpenses(request):
         cust = customer.objects.filter(cid=cmp1)
         acc = accounts1.objects.filter(cid=cmp1,acctype='Expenses')
         acc1 = accounts1.objects.filter(cid=cmp1,acctype='Cash')
-        context = {'cmp1': cmp1, 'vndr': vndr, 'cust': cust,'acc':acc,'acc1':acc1}
+        acc2 = accounts1.objects.filter(cid=cmp1,acctype='Other Expenses')
+        context = {'cmp1': cmp1, 'vndr': vndr, 'cust': cust,'acc':acc,'acc1':acc1,'acc2':acc2}
         return render(request,'app1/addexpense.html',context)
     return redirect('/') 
 
@@ -32955,32 +32968,60 @@ def payment_method(request):
         cmp1 = company.objects.get(id=request.session['uid'])
         if request.method=='POST':
             meth = request.POST['newmethod']
-            npm=paymentmethod(newmethod = meth)
+            npm=paymentmethod(newmethod = meth,cid=cmp1)
             npm.save()
             return redirect('addpurchasepymnt')
         return render(request,'app1/addpurchasepymnt.html',{'cmp1':cmp1})
     return redirect('/')
 
-def itemdata(request):
+@login_required(login_url='regcomp')
+def createaccount1(request):
     if 'uid' in request.session:
         if request.session.has_key('uid'):
             uid = request.session['uid']
         else:
             return redirect('/')
         cmp1 = company.objects.get(id=request.session['uid'])
-        id = request.GET.get('id')
+        if request.method=='POST':
+            acctype = request.POST['acctype']
+            name = request.POST['name']
+            des = request.POST['description']                           
+            balance = request.POST.get('balance')
+            if balance == "":
+                balance=0.0
+            asof = request.POST['asof']
+            dbbalance = request.POST['dbbalance']
+            if dbbalance == "":
+                dbbalance = 0.0
+            account = accounts1(acctype=acctype, name=name, description=des, balance=balance, asof=asof, cid=cmp1,dbbalance=dbbalance)
+            account.save()
+            return redirect('addpurchasepymnt')
+        return render(request,'app1/addpurchasepymnt.html',{'cmp1':cmp1})
+    return redirect('/')
 
-        toda = date.today()
-        tod = toda.strftime("%Y-%m-%d")
-        # to = toda.strftime("%d-%m-%Y")
-        item = itemtable.objects.get(name=id,cid=cmp1)
-        print(item)
-        hsn = item.hsn
-        qty = item.stock
-        price = item.purchase_cost
-        gst = item.intra_st
-        sgst = item.inter_st
-        return JsonResponse({"status":" not",'hsn':hsn,'qty':qty,'price':price,'gst':gst,'sgst':sgst})
+@login_required(login_url='regcomp')
+def createaccount2(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        if request.method=='POST':
+            acctype = request.POST['acctype']
+            name = request.POST['name']
+            des = request.POST['description']                           
+            balance = request.POST.get('balance')
+            if balance == "":
+                balance=0.0
+            asof = request.POST['asof']
+            dbbalance = request.POST['dbbalance']
+            if dbbalance == "":
+                dbbalance = 0.0
+            account = accounts1(acctype=acctype, name=name, description=des, balance=balance, asof=asof, cid=cmp1,dbbalance=dbbalance)
+            account.save()
+            return redirect('addexpenses')
+        return render(request,'app1/addexpense.html',{'cmp1':cmp1})
     return redirect('/')
 
 def gopurchasedebit(request):
@@ -33147,13 +33188,12 @@ def createpurchasedebit(request):
 
             dl=pdebit.debit_no
             dt=pdebit.debitdate
-            ts="Vendor Credits"
 
             if len(items)==len(quantity) and items and quantity:
                 mapped=zip(items,quantity)
                 mapped=list(mapped)
                 for ele in mapped:
-                    pAdd,created = item.objects.get_or_create(items = ele[0],qty = ele[1],transactions=ts,details=dl,
+                    pAdd,created = item.objects.get_or_create(items = ele[0],qty = ele[1],transactions="Vendor Credits",details=dl,
                     date=dt,debit=pdeb,cid=cmp1)
 
             if len(items)==len(hsn)==len(quantity)==len(price)==len(tax)==len(total) and items and hsn and quantity and price and tax and total:
