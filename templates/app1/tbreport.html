@@ -51,18 +51,6 @@ body{
 .table-row{
         cursor:pointer;
 }
-/* .table-row:hover{
-    background-color: rgb(217, 232, 51);
-} */
-
-/*Resize the wrap to see the search bar change!*/
-.wrap{
-  width: 40%;
-  /* position: absolute;
-  top: 50%;
-  left: 50%; */
-  /* transform: translate(-50%, -50%); */
-}
 
       </style>
 
@@ -111,7 +99,7 @@ body{
 
             <div class="card radius-15">
                 <div class="card-body">
-                    <form action="{% url 'tbreport1' id %}" method="post" class="needs-validation" novalidate>
+                    <form action="" method="post" class="needs-validation" novalidate>
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-sm-4">

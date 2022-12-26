@@ -3400,6 +3400,7 @@ def invcreate2(request):
             bs4.details1 = inv2.invoiceno
             bs4.details2 = inv2.invoice_orderno
             bs4.date = inv2.invoicedate
+            bs4.amount = inv2.grandtotal
             bs4.payments = inv2.CGST
             bs4.save()
 
@@ -3413,6 +3414,7 @@ def invcreate2(request):
             bs5.details1 = inv2.invoiceno
             bs5.details2 = inv2.invoice_orderno
             bs5.date = inv2.invoicedate
+            bs5.amount = inv2.grandtotal
             bs5.payments = inv2.SGST
             bs5.save()
         else:
@@ -3426,6 +3428,7 @@ def invcreate2(request):
             bs6.details1 = inv2.invoiceno
             bs6.details2 = inv2.invoice_orderno
             bs6.date = inv2.invoicedate
+            bs6.amount = inv2.grandtotal
             bs6.payments = inv2.IGST
             bs6.save()
             
@@ -3439,6 +3442,7 @@ def invcreate2(request):
         bs7.details1 = inv2.invoiceno
         bs7.details2 = inv2.invoice_orderno
         bs7.date = inv2.invoicedate
+        bs7.amount = inv2.grandtotal
         bs7.payments = inv2.TCS
         bs7.save()
 
@@ -3498,6 +3502,16 @@ def invcreate2(request):
 
         invoiceid=invoice.objects.get(invoiceid =inv2.invoiceid)
 
+        dl=inv2.invoiceno
+        dt=inv2.invoicedate
+
+        if len(product)==len(qty) and product and qty:
+            mapped=zip(product,qty)
+            mapped=list(mapped)
+            for ele in mapped:
+                iAdd,created = item.objects.get_or_create(items = ele[0],qty = ele[1],transactions="Invoice",details=dl,
+                date=dt,inv=invoiceid,cid=cmp1)
+
         if len(product)==len(hsn)==len(description)==len(qty)==len(price)==len(tax)==len(total) and product and hsn and description and qty and price and tax and total:
             mapped=zip(product,hsn,description,qty,price,tax,total)
             mapped=list(mapped)
@@ -3505,25 +3519,32 @@ def invcreate2(request):
                 invoiceAdd,created = invoice_item.objects.get_or_create(product = ele[0],hsn=ele[1],description=ele[2],
                 qty=ele[3],price=ele[4],tax=ele[5],total=ele[6],invoice=invoiceid,cid=cmp1)
 
-                itemqty = itemtable.objects.get(name=ele[0],cid=cmp1)
-                if itemqty.stock != 0:
+                itemqty1 = itemtable.objects.get(name=ele[0],cid=cmp1)
+                if itemqty1.stock != 0:
                     temp=0
-                    temp = itemqty.stock 
-
+                    temp = itemqty1.stock
                     temp = temp-int(ele[3])
-                    itemqty.stock =temp
+                    itemqty1.stock =temp
+                    itemqty1.save()
+
+                itemqty = itemtable.objects.get(name=ele[0],cid=cmp1)
+                if itemqty.stockout != 0:
+                    temp=0
+                    temp = itemqty.stockout
+                    temp = temp+int(ele[3])
+                    itemqty.stockout =temp
                     itemqty.save()
 
-
+                elif itemqty.stockout == 0:
+                    temp=0
+                    temp = itemqty.stockout 
+                    temp = temp+int(ele[3])
+                    itemqty.stockout =temp
+                    itemqty.save()
 
         return redirect('goinvoices')
     else:
         return redirect('goinvoices')
-
-
-
-
-
 
 @login_required(login_url='regcomp')
 def invcreate(request):
@@ -13681,6 +13702,257 @@ def balancesheet(request):
     except:
         return redirect('godash')
 
+def balancesheet1(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+
+        ca=balance_sheet.objects.filter(cid=cmp1,acctype='Current Asset').values('account').annotate(t1=Sum('payments'))
+        cas=balance_sheet.objects.filter(cid=cmp1,acctype='Current Assets').values('account').annotate(t1=Sum('payments'))
+        ar=balance_sheet.objects.filter(cid=cmp1,acctype='Account Receivable(Debtors)').values('account').annotate(t1=Sum('payments'))
+        cl=balance_sheet.objects.filter(cid=cmp1,acctype='Current Liabilities').values('account').annotate(t1=Sum('payments'))
+        ap=balance_sheet.objects.filter(cid=cmp1,acctype='Accounts Payable(Creditors)').values('account').annotate(t1=Sum('payments'))
+
+        ar1=balance_sheet.objects.filter(cid=cmp1,acctype='Account Receivable(Debtors)')
+        cas1=balance_sheet.objects.filter(cid=cmp1,acctype='Current Assets')
+        ca1=balance_sheet.objects.filter(cid=cmp1,acctype='Current Asset')
+        cl1=balance_sheet.objects.filter(cid=cmp1,acctype='Current Liabilities')
+        ap1=balance_sheet.objects.filter(cid=cmp1,acctype='Accounts Payable(Creditors)')
+
+        incm=profit_loss.objects.filter(cid=cmp1,acctype='Income')
+        cgs=profit_loss.objects.filter(cid=cmp1,acctype='Cost of Goods Sold')
+        expnc=profit_loss.objects.filter(cid=cmp1,acctype='Expense')
+
+        t1 =0
+        asset =0
+
+        for i in ca1:
+            t1+=i.payments
+        
+        asset= t1
+        print(asset)
+
+        t2 =0
+        accrece =0
+
+        for i in ar1:
+            t2+=i.payments
+
+        accrece = t2
+        print(accrece)
+
+        t3 =0
+        taxrece =0
+
+        for i in cas1:
+            t3+=i.payments
+
+        taxrece = t3
+        print(taxrece)
+
+        tca=0
+        tca = asset + accrece + taxrece
+
+        t4 =0
+        accpy =0
+
+        for i in ap1:
+            t4+=i.payments
+
+        accpy = t4
+        print(accpy)
+
+        t5 =0
+        taxpy =0
+
+        for i in cl1:
+            t5+=i.payments
+
+        taxpy = t5
+        print(taxpy)
+
+        tcl =0
+        tcl = accpy + taxpy
+
+        t6 =0
+        income =0
+
+        for i in incm:
+            t6+=i.payments
+
+        income = t6
+
+        t7 =0
+        cogs =0
+
+        for i in cgs:
+            t7+=i.payments
+
+        cogs = t7
+
+        t8 =0
+        expense =0
+
+        for i in expnc:
+            t8+=i.payments
+
+        expense = t8
+        equity =0
+        pandl = round((income - cogs) - expense)
+        tequity = round(equity + pandl)
+        tlande = round(tcl + tequity)
+
+        context = {'ar':ar, 'cas':cas, 'ca':ca, 'cs':ca, 'cl':cl, 'ap':ap, 
+            'asset':asset, 'accrece':accrece, 'taxrece':taxrece, 'tca':tca,
+            'accpy':accpy, 'taxpy':taxpy, 'tcl':tcl, 'cmp1':cmp1,
+            'pandl':pandl, 'tequity':tequity, 'tlande':tlande
+        }
+        return render(request,'app1/balancesheet1.html',context)
+    return redirect('/') 
+
+def balancesheet2(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+
+        toda = date.today()
+        tod = toda.strftime("%Y-%m-%d")
+        filmeth = request.POST['reportperiod']
+        if filmeth == 'Today':
+            fromdate = tod
+            todate = tod
+        elif filmeth == 'Custom':
+            fromdate = request.POST['fper']
+            todate = request.POST['tper']
+        elif filmeth == 'This month':
+            fromdate = toda.strftime("%Y-%m-01")
+            todate = toda.strftime("%Y-%m-31")
+        elif filmeth == 'This financial year':
+            if int(toda.strftime("%m")) >= 1 and int(toda.strftime("%m")) <= 3:
+                pyear = int(toda.strftime("%Y")) - 1
+                fromdate = f'{pyear}-03-01'
+                todate = f'{toda.strftime("%Y")}-03-31'
+            else:
+                pyear = int(toda.strftime("%Y")) + 1
+                fromdate = f'{toda.strftime("%Y")}-03-01'
+                todate = f'{pyear}-03-31'
+        else:
+            return redirect('balancesheet1')
+
+        ca=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Current Asset').values(
+            'account').annotate(t1=Sum('payments'))
+        cas=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Current Assets').values(
+            'account').annotate(t1=Sum('payments'))
+        ar=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Account Receivable(Debtors)').values(
+            'account').annotate(t1=Sum('payments'))
+        cl=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Current Liabilities').values(
+            'account').annotate(t1=Sum('payments'))
+        ap=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Accounts Payable(Creditors)').values(
+            'account').annotate(t1=Sum('payments'))
+
+        ar1=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Account Receivable(Debtors)')
+        cas1=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Current Assets')
+        ca1=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Current Asset')
+        cl1=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Current Liabilities')
+        ap1=balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Accounts Payable(Creditors)')
+
+        incm=profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Income')
+        cgs=profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Cost of Goods Sold')
+        expnc=profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,acctype='Expense')
+
+        t1 =0
+        asset =0
+
+        for i in ca1:
+            t1+=i.payments
+        
+        asset= t1
+        print(asset)
+
+        t2 =0
+        accrece =0
+
+        for i in ar1:
+            t2+=i.payments
+
+        accrece = t2
+        print(accrece)
+
+        t3 =0
+        taxrece =0
+
+        for i in cas1:
+            t3+=i.payments
+
+        taxrece = t3
+        print(taxrece)
+
+        tca=0
+        tca = asset + accrece + taxrece
+
+        t4 =0
+        accpy =0
+
+        for i in ap1:
+            t4+=i.payments
+
+        accpy = t4
+        print(accpy)
+
+        t5 =0
+        taxpy =0
+
+        for i in cl1:
+            t5+=i.payments
+
+        taxpy = t5
+        print(taxpy)
+
+        tcl =0
+        tcl = accpy + taxpy
+
+        t6 =0
+        income =0
+
+        for i in incm:
+            t6+=i.payments
+
+        income = t6
+
+        t7 =0
+        cogs =0
+
+        for i in cgs:
+            t7+=i.payments
+
+        cogs = t7
+
+        t8 =0
+        expense =0
+
+        for i in expnc:
+            t8+=i.payments
+
+        expense = t8
+        equity =0
+        pandl = round((income - cogs) - expense)
+        tequity = round(equity + pandl)
+        tlande = round(tcl + tequity)
+
+        context = {'ar':ar, 'cas':cas, 'ca':ca, 'cs':ca, 'cl':cl, 'ap':ap, 
+            'asset':asset, 'accrece':accrece, 'taxrece':taxrece, 'tca':tca,
+            'accpy':accpy, 'taxpy':taxpy, 'tcl':tcl, 'cmp1':cmp1,
+            'pandl':pandl, 'tequity':tequity, 'tlande':tlande
+        }
+        return render(request,'app1/balancesheet1.html',context)
+    return redirect('/') 
+
 def bsreport(request,id):
     if 'uid' in request.session:
         if request.session.has_key('uid'):
@@ -13827,26 +14099,6 @@ def profitandloss1(request):
         else:
             return redirect('profitandloss')
 
-        # pur=purchasebill.objects.all()
-        # sum1=0
-        # for i in pur:
-        #     sum1+=i.grand_total
-        
-        # inv = invoice.objects.filter()
-        # sum2=0
-        # for i in inv:
-        #     sum2+=i.grandtotal
-
-        # income = accounts1.objects.filter(acctype='Income',cid=cmp1)
-        # sum2=0
-        # for i in income:
-        #     sum2+=i.balance
-
-        # cost = accounts1.objects.filter(acctype='Cost Of Goods Sold',cid=cmp1)
-        # sum1=0
-        # for i in cost:
-        #     sum1+=i.balance
-
         pbl = profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,accname='Cost of Goods Sold').values('accname').annotate(t1=Sum('payments'))
 
         inv = profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,transactions='Invoice').values('accname').annotate(t1=Sum('payments'))
@@ -13854,6 +14106,7 @@ def profitandloss1(request):
         exp = profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,transactions='Expense').values('accname').annotate(t1=Sum('payments'))
 
         acc = profit_loss.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate)
+
         sum1=0
         sum2=0
         sum3=0
@@ -13871,18 +14124,6 @@ def profitandloss1(request):
                 sum3+=i.payments
 
         sum4 = sum1-sum2
-
-
-        # exp = profit_loss.objects.filter(transactions='Expense',cid=cmp1)
-        # sum3=0
-        # for i in exp:
-        #     sum3+=i.payments
-
-        # ex = expense2.objects.filter().values('account').annotate(t1=Sum('amount'))
-        # ex = expense2.objects.all()
-        # sum3 = 0
-        # for i in ex:
-        #     sum3+=i.amount
 
         sumtot=sum4-sum3  
 
@@ -26924,8 +27165,6 @@ def goaddinvoices(request):
         acc  = accounts1.objects.filter(acctype='Cost of Goods Sold',cid=cmp1)
         acc1  = accounts1.objects.filter(acctype='Sales',cid=cmp1)
 
-
-
         context = {'cmp1': cmp1, 'customers': customers, 'inv': inv, 'bun': bun, 'noninv': noninv,'item' :item,
                    'ser': ser,
                    'tod': tod,
@@ -27752,6 +27991,7 @@ def updateinvoice2(request, id):
             bs4.account = "Output CGST"
             bs4.invc = invoi
             bs4.date = invoi.invoicedate
+            bs4.amount = invoi.grandtotal
             bs4.payments = invoi.CGST
             bs4.save()
 
@@ -27763,6 +28003,7 @@ def updateinvoice2(request, id):
             bs5.account = "Output SGST"
             bs5.invc = invoi
             bs5.date = invoi.invoicedate
+            bs5.amount = invoi.grandtotal
             bs5.payments = invoi.SGST
             bs5.save()
         else:
@@ -27774,6 +28015,7 @@ def updateinvoice2(request, id):
             bs6.account = "Output IGST"
             bs6.invc = invoi
             bs6.date = invoi.invoicedate
+            bs6.amount = invoi.grandtotal
             bs6.payments = invoi.IGST
             bs6.save()
             
@@ -27785,6 +28027,7 @@ def updateinvoice2(request, id):
         bs7.account = "TDS Receivable"
         bs7.invc = invoi
         bs7.date = invoi.invoicedate
+        bs7.amount = invoi.grandtotal
         bs7.payments = invoi.TCS
         bs7.save()
 
@@ -30075,27 +30318,6 @@ def stocksummary(request):
                 st2+=i.stockout
             st3=st1-st2
 
-            # billitm = purchasebill_item.objects.all().filter(items=itemname)
-            # qtyin=0
-            # for j in billitm :
-            #     if j.quantity:
-            #         qtyin+=j.quantity
-
-            # qtyout=0
-            # tot1=0
-            # tot2=0
-            # debitm1 = purchasedebit1.objects.filter(items=itemname).all()
-            # for j in debitm1 :
-            #     if j.quantity:
-            #         tot1+=j.quantity
-
-            # initm1 = invoice_item.objects.filter(product=itemname).all()
-            # for j in initm1 :
-            #     if j.qty:
-            #         tot2+=j.qty
-
-            # qtyout = tot1+tot2
-
         qtyin1 = purchasebill_item.objects.filter().aggregate(t2=Sum('quantity'))
 
         qtyout1=0
@@ -30113,8 +30335,6 @@ def stocksummary(request):
                 tot4+=j.qty
 
         qtyout1 = tot3+tot4
-   
-        # stock = stockadjust.objects.filter(cid=cmp1)
         
         context = {'item':item,'cmp1':cmp1,'qtyin1':qtyin1,'qtyout1':qtyout1,'st3':st3}
         return render(request, 'app1/stocksummary.html', context)
@@ -30148,29 +30368,6 @@ def stocksummary1(request):
             return redirect('stocksummary')
 
         item = itemtable.objects.filter(itmdate__gte=fromdate, itmdate__lte=todate)
-        # for i in item:
-        #     itemname = i.name
-
-        #     billitm = purchasebill_item.objects.all().filter(items=itemname)
-        #     qtyin=0
-            # for j in billitm :
-            #     if j.quantity:
-            #         qtyin+=j.quantity
-
-            # qtyout=0
-            # tot1=0
-            # tot2=0
-            # debitm1 = purchasedebit1.objects.filter(items=itemname).all()
-            # for j in debitm1 :
-            #     if j.quantity:
-            #         tot1+=j.quantity
-
-            # initm1 = invoice_item.objects.filter(product=itemname).all()
-            # for j in initm1 :
-            #     if j.qty:
-            #         tot2+=j.qty
-
-            # qtyout = tot1+tot2
 
         qtyin1 = purchasebill_item.objects.filter().aggregate(t2=Sum('quantity'))
 
@@ -30189,8 +30386,6 @@ def stocksummary1(request):
                 tot4+=j.qty
 
         qtyout1 = tot3+tot4
-   
-        # stock = stockadjust.objects.filter(cid=cmp1)
         
         context = {'item':item,'cmp1':cmp1,'qtyin1':qtyin1,'qtyout1':qtyout1}
         return render(request, 'app1/stocksummary.html', context)
@@ -30414,63 +30609,426 @@ def gstr1(request):
 
 @login_required(login_url='regcomp')
 def gstr3b(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
 
-    cmp1 = company.objects.get(id=request.session["uid"])
+        tax = balance_sheet.objects.filter(cid=cmp1)
+       
+        tax1 = balance_sheet.objects.filter(cid=cmp1,account='Account Receivable(Debtors)',transactions='Invoice')
+        tax2 = balance_sheet.objects.filter(cid=cmp1,account='Output CGST',payments='0')
+        tax3 = balance_sheet.objects.filter(cid=cmp1,account='Output IGST',payments='0')
 
-
-    cust = customer.objects.filter(cid=cmp1)
-    for i in cust:
-        if i.gsttype == 'GST registered- Regular':
-            fullname1 = i.firstname +' '+ i.lastname
-            updinv1 = invoice.objects.filter(cid=cmp1,customername=fullname1)
-            for j in updinv1:
-                j.gsttype='GST registered- Regular'
-                j.save()
-        if i.gsttype == "GST-unregistered":
-            fullname2 = i.firstname +' '+ i.lastname
-            updinv2 = invoice.objects.filter(cid=cmp1,customername=fullname2)
-            for k in updinv2:
-                k.gsttype= "GST-unregistered"
-                k.save()        
+        t0 = 0
+        total = 0
+        total2 = 0
         
-        if i.gsttype == 'Overseas':
-            fullname3 = i.firstname +' '+ i.lastname
-            updinv3 = invoice.objects.filter(cid=cmp1,customername=fullname3)
-            for l in updinv3:
-                l.gsttype='Overseas'
-                l.save() 
-        if i.gsttype == 'SEZ':
-            fullname4 = i.firstname +' '+ i.lastname
-            updinv4 = invoice.objects.filter(cid=cmp1,customername=fullname4)
-            for m in updinv4:
-                m.gsttype='SEZ'
-                m.save()  
-        if i.gsttype == "Deemed exports - EOU's STP's EHTP's etc":
-            fullname5 = i.firstname +' '+ i.lastname
-            updinv5 = invoice.objects.filter(cid=cmp1,customername=fullname5)
-            for n in updinv4:
-                n.gsttype="Deemed exports - EOU's STP's EHTP's etc"
-                n.save()  
-        if i.gsttype == "Exempt":
-            fullname6 = i.firstname +' '+ i.lastname
-            updinv5 = invoice.objects.filter(cid=cmp1,customername=fullname6)
-            for o in updinv5:
-                o.gsttype="Exempt"
-                o.save()  
+        for i in tax1 :
+            t0 += round(i.payments)
+
+        total2 = t0
+
+        t02 = 0
+        total3 = 0
+        
+        for i in tax2 :
+            t02 += round(i.amount)
+
+        total3 = t02
+
+        t03 = 0
+        total4 = 0
+        
+        for i in tax3 :
+            t03 += round(i.amount)
+        
+        total4 = t03
+
+        total1 = total3 + total4
+        total = total2 - total1
+        sum1 = total + total1
+        
+        t2 = 0
+        cgst = 0
+        
+        for i in tax :
+            if i.account == 'Output CGST':
+                t2 += round(i.payments)
+        
+        cgst = t2
+
+        t4 = 0
+        sgst = 0
+        
+        for i in tax :
+            if i.account == 'Output SGST':
+                t4 += round(i.payments)
+        
+        sgst = t4
+
+        t6 = 0
+        igst = 0
+        
+        for i in tax :
+            if i.account == 'Output IGST':
+                t6 += round(i.payments)
+        
+        igst = t6
+
+        t8 = 0
+        tds = 0
+        
+        for i in tax :
+            if i.account == 'TDS Receivable':
+                t8 += round(i.payments)
+        
+        tds = t8
+
+        t10 = 0
+        cgst1 = 0
+        
+        for i in tax :
+            if i.account == 'Output CGST':
+                if i.payments == '0':
+                    t10 += round(i.payments)
+        
+        cgst1 = t10
+
+        t12 = 0
+        sgst1 = 0
+        
+        for i in tax :
+            if i.account == 'Output SGST':
+                if i.payments == '0':
+                    t12 += round(i.payments)
+        
+        sgst1 = t12
+
+        t14 = 0
+        igst1 = 0
+        
+        for i in tax :
+            if i.account == 'Output IGST':
+                if i.payments == '0':
+                    t14 += round(i.payments)
+        
+        igst1 = t14
+
+        t16 = 0
+        tds1 = 0
+        
+        for i in tax :
+            if i.account == 'TDS Receivable':
+                if i.payments == '0':
+                    t16 += round(i.payments)
+        
+        tds1 = t16
+
+        t1 = 0
+        cgst2 = 0
+        
+        for i in tax :
+            if i.account == 'Input CGST':
+                t1 += round(i.payments)
+        
+        cgst2 = t1
+
+        t3 = 0
+        sgst2 = 0
+        
+        for i in tax :
+            if i.account == 'Input SGST':
+                t3 += round(i.payments)
+        
+        sgst2 = t3
+
+        t5 = 0
+        igst2 = 0
+        
+        for i in tax :
+            if i.account == 'Input IGST':
+                t5 += round(i.payments)
+        
+        igst2 = t5
+
+        t7 = 0
+        tds2 = 0
+        
+        for i in tax :
+            if i.account == 'TDS Payable':
+                t7 += round(i.payments)
+
+        tds2 = t7
+
+        tax1 = cgst + cgst1 + cgst2
+        tax2 = sgst + sgst1 + sgst2
+        tax3 = igst + igst1 + igst2
+        tax4 = tds + tds1 + tds2
+        
+        context = {'total':total,'total1':total1,'sum1':sum1,
+            'cgst':cgst, 'sgst':sgst, 'igst':igst, 'tds':tds,
+            'cgst1':cgst1, 'sgst1':sgst1, 'igst1':igst1, 'tds1':tds1,
+            'cgst2':cgst2, 'sgst2':sgst2, 'igst2':igst2, 'tds2':tds2,
+            'tax1':tax1, 'tax2':tax2, 'tax3':tax3, 'tax4':tax4,'cmp1': cmp1
+        }
+        return render(request,'app1/gstr3b.html',context)
+    return redirect('gopurchaseorder')
+
+@login_required(login_url='regcomp')
+def gstr3b1(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+
+        toda = date.today()
+        tod = toda.strftime("%Y-%m-%d")
+        filmeth = request.POST['reportperiod']
+        if filmeth == 'Today':
+            fromdate = tod
+            todate = tod
+        elif filmeth == 'Custom':
+            fromdate = request.POST['fdate']
+            todate = request.POST['ldate']
+        elif filmeth == 'This month':
+            fromdate = toda.strftime("%Y-%m-01")
+            todate = toda.strftime("%Y-%m-31")
+        elif filmeth == 'This financial year':
+            if int(toda.strftime("%m")) >= 1 and int(toda.strftime("%m")) <= 3:
+                pyear = int(toda.strftime("%Y")) - 1
+                fromdate = f'{pyear}-03-01'
+                todate = f'{toda.strftime("%Y")}-03-31'
+            else:
+                pyear = int(toda.strftime("%Y")) + 1
+                fromdate = f'{toda.strftime("%Y")}-03-01'
+                todate = f'{pyear}-03-31'
+        else:
+            return redirect('gstr3b')
+
+        tax = balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate)
+        tax1 = balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,
+            account='Account Receivable(Debtors)',transactions='Invoice')
+        tax2 = balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,account='Output CGST',payments='0')
+        tax3 = balance_sheet.objects.filter(cid=cmp1,date__gte=fromdate, date__lte=todate,account='Output IGST',payments='0')
+
+        t0 = 0
+        total = 0
+        total2 = 0
+        
+        for i in tax1 :
+            t0 += round(i.payments)
+
+        total2 = t0
+
+        t02 = 0
+        total3 = 0
+        
+        for i in tax2 :
+            t02 += round(i.amount)
+
+        total3 = t02
+
+        t03 = 0
+        total4 = 0
+        
+        for i in tax3 :
+            t03 += round(i.amount)
+        
+        total4 = t03
+
+        total1 = total3 + total4
+        total = total2 - total1
+        sum1 = total + total1
+        
+        t2 = 0
+        cgst = 0
+        
+        for i in tax :
+            if i.account == 'Output CGST':
+                t2 += round(i.payments)
+        
+        cgst = t2
+
+        t4 = 0
+        sgst = 0
+        
+        for i in tax :
+            if i.account == 'Output SGST':
+                t4 += round(i.payments)
+        
+        sgst = t4
+
+        t6 = 0
+        igst = 0
+        
+        for i in tax :
+            if i.account == 'Output IGST':
+                t6 += round(i.payments)
+        
+        igst = t6
+
+        t8 = 0
+        tds = 0
+        
+        for i in tax :
+            if i.account == 'TDS Receivable':
+                t8 += round(i.payments)
+        
+        tds = t8
+
+        t10 = 0
+        cgst1 = 0
+        
+        for i in tax :
+            if i.account == 'Output CGST':
+                if i.payments == '0':
+                    t10 += round(i.payments)
+        
+        cgst1 = t10
+
+        t12 = 0
+        sgst1 = 0
+        
+        for i in tax :
+            if i.account == 'Output SGST':
+                if i.payments == '0':
+                    t12 += round(i.payments)
+        
+        sgst1 = t12
+
+        t14 = 0
+        igst1 = 0
+        
+        for i in tax :
+            if i.account == 'Output IGST':
+                if i.payments == '0':
+                    t14 += round(i.payments)
+        
+        igst1 = t14
+
+        t16 = 0
+        tds1 = 0
+        
+        for i in tax :
+            if i.account == 'TDS Receivable':
+                if i.payments == '0':
+                    t16 += round(i.payments)
+        
+        tds1 = t16
+
+        t1 = 0
+        cgst2 = 0
+        
+        for i in tax :
+            if i.account == 'Input CGST':
+                t1 += round(i.payments)
+        
+        cgst2 = t1
+
+        t3 = 0
+        sgst2 = 0
+        
+        for i in tax :
+            if i.account == 'Input SGST':
+                t3 += round(i.payments)
+        
+        sgst2 = t3
+
+        t5 = 0
+        igst2 = 0
+        
+        for i in tax :
+            if i.account == 'Input IGST':
+                t5 += round(i.payments)
+        
+        igst2 = t5
+
+        t7 = 0
+        tds2 = 0
+        
+        for i in tax :
+            if i.account == 'TDS Payable':
+                t7 += round(i.payments)
+
+        tds2 = t7
+
+        tax1 = cgst + cgst1 + cgst2
+        tax2 = sgst + sgst1 + sgst2
+        tax3 = igst + igst1 + igst2
+        tax4 = tds + tds1 + tds2
+        
+        context = {'total':total,'total1':total1,'sum1':sum1,
+            'cgst':cgst, 'sgst':sgst, 'igst':igst, 'tds':tds,
+            'cgst1':cgst1, 'sgst1':sgst1, 'igst1':igst1, 'tds1':tds1,
+            'cgst2':cgst2, 'sgst2':sgst2, 'igst2':igst2, 'tds2':tds2,
+            'tax1':tax1, 'tax2':tax2, 'tax3':tax3, 'tax4':tax4,'cmp1': cmp1
+        }
+        return render(request,'app1/gstr3b.html',context)
+    return redirect('gopurchaseorder')
+    
+# @login_required(login_url='regcomp')
+# def gstr3b(request):
+
+#     cmp1 = company.objects.get(id=request.session["uid"])
+
+
+#     cust = customer.objects.filter(cid=cmp1)
+#     for i in cust:
+#         if i.gsttype == 'GST registered- Regular':
+#             fullname1 = i.firstname +' '+ i.lastname
+#             updinv1 = invoice.objects.filter(cid=cmp1,customername=fullname1)
+#             for j in updinv1:
+#                 j.gsttype='GST registered- Regular'
+#                 j.save()
+#         if i.gsttype == "GST-unregistered":
+#             fullname2 = i.firstname +' '+ i.lastname
+#             updinv2 = invoice.objects.filter(cid=cmp1,customername=fullname2)
+#             for k in updinv2:
+#                 k.gsttype= "GST-unregistered"
+#                 k.save()        
+        
+#         if i.gsttype == 'Overseas':
+#             fullname3 = i.firstname +' '+ i.lastname
+#             updinv3 = invoice.objects.filter(cid=cmp1,customername=fullname3)
+#             for l in updinv3:
+#                 l.gsttype='Overseas'
+#                 l.save() 
+#         if i.gsttype == 'SEZ':
+#             fullname4 = i.firstname +' '+ i.lastname
+#             updinv4 = invoice.objects.filter(cid=cmp1,customername=fullname4)
+#             for m in updinv4:
+#                 m.gsttype='SEZ'
+#                 m.save()  
+#         if i.gsttype == "Deemed exports - EOU's STP's EHTP's etc":
+#             fullname5 = i.firstname +' '+ i.lastname
+#             updinv5 = invoice.objects.filter(cid=cmp1,customername=fullname5)
+#             for n in updinv4:
+#                 n.gsttype="Deemed exports - EOU's STP's EHTP's etc"
+#                 n.save()  
+#         if i.gsttype == "Exempt":
+#             fullname6 = i.firstname +' '+ i.lastname
+#             updinv5 = invoice.objects.filter(cid=cmp1,customername=fullname6)
+#             for o in updinv5:
+#                 o.gsttype="Exempt"
+#                 o.save()  
     
 
 
 
-    cmp1 = company.objects.get(id=request.session["uid"])
-    cgst = invoice.objects.filter(cid=cmp1).annotate(total=Sum('SGST'))
+#     cmp1 = company.objects.get(id=request.session["uid"])
+#     cgst = invoice.objects.filter(cid=cmp1).annotate(total=Sum('SGST'))
 
-    cgst1 = invoice.objects.filter(cid=cmp1,status='Approved',gsttype='GST-registered-Regular').values().aggregate(total_cgst=Sum('CGST'),
-                                                           total_igst=Sum('IGST'),
-                                                           total_sgst=Sum('SGST'),
-                                                           total_amt=Sum('subtotal'),
-                                                           total_tcs=Sum('TCS'),
-                                                           taxbaleamt = Sum('CGST')+Sum('IGST')+Sum('SGST')+Sum('TCS'),
-                                                           total_invamt=Sum('grandtotal'))
+#     tax1 = invoice.objects.filter(cid=cmp1,gsttype='GST-registered-Regular').values().aggregate(cgst=Sum('CGST'),
+#                                                            igst=Sum('IGST'),
+#                                                            sgst=Sum('SGST'),
+#                                                            tcs=Sum('TCS'),
+#                                                            taxbaleamt = Sum('CGST')+Sum('IGST')+Sum('SGST')+Sum('TCS'),
+#                                                            total_invamt=Sum('grandtotal'))
 
 
     # list.append(dict)                                                
@@ -30497,8 +31055,8 @@ def gstr3b(request):
       
   
 
-    context = {'cmp1':cmp1,'cgst':cgst,'cgst1':cgst1}
-    return render(request, 'app1/gstr3b.html', context)
+    # context = {'cmp1':cmp1,'cgst':cgst,'tax1':tax1}
+    # return render(request, 'app1/gstr3b.html', context)
             
 
 @login_required(login_url='regcomp')
@@ -30663,18 +31221,7 @@ def createvendor(request):
                         openingbalance=balance,opblnc_due=due, street=street, city=city, state=state, paymentterms=payment,
                         pincode=pincode, country=country, shipstreet=shipstreet, shipcity=shipcity, shipstate=shipstate,
                         shippincode=shippincode, shipcountry=shipcountry,cid=cmp1)
-
             vndr.save()
-
-            # if vndr.openingbalance != "":
-            #     add_vndr_stat=vendor_statment(
-            #         vendor = vndr.firstname +" "+ vndr.lastname,
-            #         cid  = cmp1,
-            #         # date = vndr.date,
-            #         transactions="Vendor Opening Balance",
-            #         amount= vndr.openingbalance,
-            #     )
-            #     add_vndr_stat.save()
 
             return redirect('govendor')
         return render(request,'app1/addvendor.html',{'cmp1': cmp1})
@@ -32634,16 +33181,10 @@ def getbilldata(request):
             print(opb )
             obdue = vend1.opblnc_due
 
-            
-
         x_data = list(billitm)
         vd= list(venobject)
         
         return JsonResponse({"status":" not","billitm":x_data,"ct":vd,'opb':opb,'obdue':obdue,'date':date})
-
-        # billitm = purchasebill.objects.values().filter(vendor_name=id)
-        # x_data = list(billitm)
-        # return JsonResponse({"status":" not","billitm":x_data})
 
 def gopurchasepymnt(request):
     if 'uid' in request.session:
@@ -33877,7 +34418,7 @@ def trial_balance(request):
         else:
             return redirect('/')
         cmp1 = company.objects.get(id=request.session['uid'])
-        ar=balance_sheet.objects.filter(cid=cmp1,acctype='Account Receivable(Debtors)')
+        ar=balance_sheet.objects.filter(cid=cmp1,acctype='Account Receivable(Debtors)').values('account').annotate(t1=Sum('payments'))
         cas=balance_sheet.objects.filter(cid=cmp1,acctype='Current Assets').values('account').annotate(t1=Sum('payments'))
         ca=balance_sheet.objects.filter(cid=cmp1,acctype='Current Asset').values('account').annotate(t1=Sum('payments'))
         cl=balance_sheet.objects.filter(cid=cmp1,acctype='Current Liabilities').values('account').annotate(t2=Sum('payments'))
@@ -34090,30 +34631,8 @@ def tbreport(request,id):
         tod = toda.strftime("%Y-%m-%d")
         to=toda.strftime("%d-%m-%Y")
 
-        filmeth = request.POST['reportperiod']
-        if filmeth == 'Today':
-            fromdate = tod
-            todate = tod
-        elif filmeth == 'Custom':
-            fromdate = request.POST['fper']
-            todate = request.POST['tper']
-        elif filmeth == 'This month':
-            fromdate = toda.strftime("%Y-%m-01")
-            todate = toda.strftime("%Y-%m-31")
-        elif filmeth == 'This financial year':
-            if int(toda.strftime("%m")) >= 1 and int(toda.strftime("%m")) <= 3:
-                pyear = int(toda.strftime("%Y")) - 1
-                fromdate = f'{pyear}-03-01'
-                todate = f'{toda.strftime("%Y")}-03-31'
-            else:
-                pyear = int(toda.strftime("%Y")) + 1
-                fromdate = f'{toda.strftime("%Y")}-03-01'
-                todate = f'{pyear}-03-31'
-        else:
-            return redirect('trial_balance',id)
-
-        bs = balance_sheet.objects.filter(account=id,date__gte=fromdate, date__lte=todate,cid=cmp1)
-        pl = profit_loss.objects.filter(accname=id,date__gte=fromdate, date__lte=todate,cid=cmp1)
+        bs = balance_sheet.objects.filter(account=id,cid=cmp1)
+        pl = profit_loss.objects.filter(accname=id,cid=cmp1)
 
         debit=0
         credit=0
@@ -34158,7 +34677,6 @@ def tbreport(request,id):
         context = {'cmp1':cmp1, 'to':to, 'fdate':fdate, 'ldate':ldate, 'bs':bs, 'debit':debit, 'credit':credit, 'total':total,
             'pl':pl, 'debit1':debit1, 'credit1':credit1, 'total1':total1
         }
-
         return render(request,'app1/tbreport.html',context)
     return redirect('/') 
 

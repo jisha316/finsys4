@@ -1535,6 +1535,7 @@ class purchasedebit1(models.Model):
 class item(models.Model):
     cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
     debit = models.ForeignKey(purchasedebit, on_delete=models.CASCADE,null=True)
+    inv = models.ForeignKey(invoice, on_delete=models.CASCADE,null=True)
     bill = models.ForeignKey(purchasebill, on_delete=models.CASCADE,null=True)
     items = models.CharField(max_length=100,null=True)
     date = models.DateField(null=True)
@@ -1588,9 +1589,8 @@ class balance_sheet(models.Model):
     date = models.DateField(blank=True,null=True)
     details1 = models.CharField(max_length=255,blank=True,null=True)
     details2= models.CharField(max_length=255,blank=True,default='')
+    amount=models.FloatField(blank=True,null=True)	
     payments=models.FloatField(blank=True,null=True)	
-
-	
 
 class item_stock(models.Model):
     item = models.CharField(max_length=255, default='')
