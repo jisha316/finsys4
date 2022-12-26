@@ -223,8 +223,8 @@ alert(col1);
                     </td>
                     <td><input type="text" name='hsn[]' id="hsn1${roinc}" placeholder='Enter HSN Code' class="form-control" style="background-color: #2f516f; color: white;" /></td>
                     <td><input type="text" name='description[]' id="description${roinc}" placeholder='Description' class="form-control" style="background-color: #2f516f; color: white;" /></td>
-                    <td><input type="number" name='qty[]' onchange="qtychange1(this)" placeholder='Enter Qty' id="qty1" class="form-control qty" step=0 min=0 style="background-color: #2f516f; color: white;" />
-                      <div><span>Available Qty :</span> <span id="qtyspan${roinc}"class='text-muted'></span></div>
+                    <td><input type="number" name='qty[]' onchange="qtychange1(this)" placeholder='Enter Qty' id="qty1" class="form-control qty" step=0 min=0 style="background-color: #2f516f;margin-top: 21px; color: white;" />
+                      <div><span>Available Qty :</span> <span id="qtyspan${roinc}"class=''></span></div>
                     </td>
                     <td><input type="number" name='price[]' id="unit1${roinc}" placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0" style="background-color: #2f516f; color: white;" /></td>
                     
@@ -295,6 +295,16 @@ alert(col1);
                     document.getElementById('description').value = data1
                     document.getElementById('qtyspan').innerHTML = data2;
                     document.getElementById('unit1').value = data3
+
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
                     
                     
                     if (place == '{{ cmp1.state }}')
@@ -337,6 +347,15 @@ alert(col1);
                     document.getElementById('description1').value = data1
                     document.getElementById('qtyspan1').innerHTML = data2;
                     document.getElementById('unit11').value = data3
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan1').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
 
                  
                     
@@ -377,6 +396,17 @@ alert(col1);
                     document.getElementById('description2').value = data1
                     document.getElementById('qtyspan2').innerHTML = data2;
                     document.getElementById('unit12').value = data3
+
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan2').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
+
                  
                     
                     if (place == '{{ cmp1.state }}')
@@ -414,6 +444,16 @@ alert(col1);
                     document.getElementById('description3').value = data1
                     document.getElementById('qtyspan3').innerHTML = data2;
                     document.getElementById('unit13').value = data3
+
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan3').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
                  
                     
                     if (place == '{{ cmp1.state }}')
@@ -450,6 +490,16 @@ alert(col1);
                     document.getElementById('description4').value = data1
                     document.getElementById('qtyspan4').innerHTML = data2;
                     document.getElementById('unit14').value = data3
+
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan4').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
                   
                     
                     if (place == '{{ cmp1.state }}')
@@ -486,6 +536,16 @@ alert(col1);
                     document.getElementById('description5').value = data1
                     document.getElementById('qtyspan5').innerHTML = data2;
                     document.getElementById('unit15').value = data3
+
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan5').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
 
                   
                     
@@ -526,6 +586,16 @@ alert(col1);
                     document.getElementById('qtyspan6').innerHTML = data2;
                     document.getElementById('unit16').value = data3
 
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan6').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
+
                 
                     
                     
@@ -563,6 +633,16 @@ alert(col1);
                     document.getElementById('description7').value = data1
                     document.getElementById('qtyspan7').innerHTML = data2;
                     document.getElementById('unit17').value = data3
+
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan7').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
                   
                     
                     if (place == '{{ cmp1.state }}')
@@ -599,6 +679,16 @@ alert(col1);
                     document.getElementById('description8').value = data1
                     document.getElementById('qtyspan8').innerHTML = data2;
                     document.getElementById('unit18').value = data3
+
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan8').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
                     
                  
                     
@@ -639,6 +729,17 @@ alert(col1);
                     document.getElementById('qtyspan9').innerHTML = data2;
                     document.getElementById('unit19').value = data3
 
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan9').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
+                    
+
                  
                     
                     
@@ -677,6 +778,16 @@ alert(col1);
                     document.getElementById('qtyspan10').innerHTML = data2;
                     document.getElementById('unit110').value = data3
 
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan10').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
+
                  
                     
                     
@@ -714,6 +825,16 @@ alert(col1);
                     document.getElementById('description11').value = data1
                     document.getElementById('qtyspan11').innerHTML = data2;
                     document.getElementById('unit111').value = data3
+
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan11').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
 
                     
                     
@@ -754,6 +875,16 @@ alert(col1);
                     document.getElementById('description12').value = data1
                     document.getElementById('qtyspan12').innerHTML = data2;
                     document.getElementById('unit112').value = data3
+
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan12').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
                     
                    
                     
@@ -793,6 +924,16 @@ alert(col1);
                     document.getElementById('qtyspan13').innerHTML = data2;
                     document.getElementById('unit113').value = data3
 
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan13').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
+
                   
                     
                     
@@ -831,6 +972,16 @@ alert(col1);
                     document.getElementById('qtyspan14').innerHTML = data2;
                     document.getElementById('unit114').value = data3
 
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan14').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
+
                  
                     
                     if (place == '{{ cmp1.state }}')
@@ -867,6 +1018,16 @@ alert(col1);
                     document.getElementById('description15').value = data1
                     document.getElementById('qtyspan15').innerHTML = data2;
                     document.getElementById('unit115').value = data3
+
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan15').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
 
                     
                     
@@ -906,6 +1067,16 @@ alert(col1);
                     document.getElementById('qtyspan16').innerHTML = data2;
                     document.getElementById('unit116').value = data3
 
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan16').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
+
                 
                     
                     
@@ -943,6 +1114,16 @@ alert(col1);
                     document.getElementById('description17').value = data1
                     document.getElementById('qtyspan17').innerHTML = data2;
                     document.getElementById('unit117').value = data3
+
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan17').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
 
                 
                     
@@ -982,6 +1163,17 @@ alert(col1);
                     document.getElementById('qtyspan18').innerHTML = data2;
                     document.getElementById('unit118').value = data3
 
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan18').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
+
+
                     
                     
                     if (place == '{{ cmp1.state }}')
@@ -1018,6 +1210,16 @@ alert(col1);
                     document.getElementById('description19').value = data1
                     document.getElementById('qtyspan19').innerHTML = data2;
                     document.getElementById('unit119').value = data3
+
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan19').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
 
                     
                     
@@ -1056,6 +1258,16 @@ alert(col1);
                     document.getElementById('description20').value = data1
                     document.getElementById('qtyspan20').innerHTML = data2;
                     document.getElementById('unit120').value = data3
+
+                    if (data2<1)
+                    {
+                      
+                      
+                      document.getElementById('qtyspan20').style.color="red";
+                    }
+                    else{
+                      pass
+                    }
 
                  
                     
@@ -1296,8 +1508,8 @@ alert(col1);
                     
                     </td>
                     <td><input type="text" name='description[]' id="description" placeholder='Description' class="form-control" style="background-color: #2f516f; color: white;" /></td>
-                    <td><input type="number" name='qty[]' onchange="qtychange1(this)" placeholder='Enter Qty' id="qty1"  class="form-control qty" step=0 min=0 style="background-color: #2f516f; color: white;" />
-                      <div><span>Available Qty :</span> <span id="qtyspan" class='text-muted'></span></div>
+                    <td><input type="number" name='qty[]' onchange="qtychange1(this)" placeholder='Enter Qty' id="qty1"  class="form-control qty" step=0 min=0 style="background-color: #2f516f;margin-top: 21px; color: white;" />
+                      <div><span>Available Qty :</span> <span id="qtyspan" class=''></span></div>
                     </td>
                     <td><input type="number" name='price[]' id="unit1" placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0" style="background-color: #2f516f; color: white;" /></td>
                     
@@ -1513,7 +1725,7 @@ alert(col1);
                 </div>
             <div class="modal-body">
 
-                <form action="new_customers3" method="POST">{% csrf_token %}
+                <form action="new_customers3" method="POST" autocomplete="off">{% csrf_token %}
 
                     <div class="row">
                         <div class="col-md-4 mt-3">
@@ -1543,13 +1755,13 @@ alert(col1);
                         <div class="col-md-4 mt-3">
                             <label for="validationCustom03">Company</label>
                             <input type="text" class="form-control" id="validationCustom03" name="company"
-                                   required style="background-color: #2f516f;color: white;">
+                                    style="background-color: #2f516f;color: white;">
                             <div class="valid-feedback">Looks good!</div>
                         </div>
                         <div class="col-md-4 mt-3">
                             <label for="validationCustom03">Location</label>
                             <input type="text" class="form-control" id="validationCustom03" name="location"
-                                   required style="background-color: #2f516f;color: white;">
+                                    style="background-color: #2f516f;color: white;">
                             <div class="valid-feedback">Looks good!</div>
                         </div>
                         <div class="col-md-4 mt-3"></div>
@@ -1617,7 +1829,7 @@ alert(col1);
                         <div class="col-md-4 mt-3">
                             <label for="validationCustom03">PAN NO</label>
                             <input type="text" class="form-control" id="validationCustom03" name="panno"
-                                   required style="background-color: #2f516f;color: white;"
+                                    style="background-color: #2f516f;color: white;"
                                    onchange="checkpan(this)" placeholder="APPCK7465F">
                             <div class="text-danger m-2" id="warnpan"></div>
                         </div>
@@ -1674,7 +1886,7 @@ alert(col1);
                         <div class="col-md-4 mt-3">
                             <label for="validationCustom03">Email</label>
                             <input type="email" class="form-control" id="validationCustom03" name="email"
-                                   required style="background-color: #2f516f;color: white;"
+                                    style="background-color: #2f516f;color: white;"
                                    placeholder="finsys@mail.com">
                             <div class="invalid-feedback">Please provide a valid Email</div>
                         </div>
@@ -1689,7 +1901,7 @@ alert(col1);
                             <label for="validationCustom01">Mobile</label>
                             <input type="text" class="form-control" id="validationCustom01"
                                    onchange="checkphone(this)" name="mobile"
-                                   required style="background-color: #2f516f;color: white;">
+                                    style="background-color: #2f516f;color: white;">
                             <div class="text-danger m-2" id="warnphone"></div>
                         </div>
                     </div>
@@ -1706,7 +1918,7 @@ alert(col1);
                                     <div class="form-row">
                                         <label for="street">Street</label>
                                         <textarea class="form-control street" id="street" name="street"
-                                                  required
+                                                  
                                                   style="background-color: #2f516f;color: white;"></textarea>
                                         <div class="invalid-feedback">Please provide a valid Street</div>
                                     </div>
@@ -1718,7 +1930,7 @@ alert(col1);
                                         <label for="city">City</label>
                                         <input type="text" class="form-control" id="city"
                                                name="city"
-                                               required
+                                               
                                                style="background-color: #2f516f;color: white;" placeholder="City">
                                         <div class="invalid-feedback">Please provide a valid City</div>
                                     </div>
@@ -1727,7 +1939,7 @@ alert(col1);
                                     <div class="form-row">
                                         <label for="state">State</label>
                                         <select type="text" class="form-control" id="state" name="state"
-                                                style="background-color: #2f516f; color: white;">
+                                            required style="background-color: #2f516f; color: white;">
                                             <option value="" disabled selected>Choose</option>
                                             <option value="Andaman and Nicobar Islads">Andaman and Nicobar Islads
                                             </option>
@@ -1779,7 +1991,7 @@ alert(col1);
                                         <label for="pinco">Pin Code</label>
                                         <input type="text" class="form-control" id="pinco"
                                                name="pincode"
-                                               required style="background-color: #2f516f;color: white;"
+                                                style="background-color: #2f516f;color: white;"
                                                placeholder="PIN code">
                                         <div class="invalid-feedback">Please provide a valid Pin Code</div>
                                     </div>
@@ -1789,7 +2001,7 @@ alert(col1);
                                         <label for="country">Country</label>
                                         <input type="text" class="form-control" id="country"
                                                name="country"
-                                               required style="background-color: #2f516f;color: white;"
+                                                style="background-color: #2f516f;color: white;"
                                                placeholder="Country">
                                         <div class="invalid-feedback">Please provide a valid Country</div>
                                     </div>
@@ -1811,7 +2023,7 @@ alert(col1);
                                         <label for="shipstreet">Street</label>
                                         <textarea class="form-control" id="shipstreet"
                                                   name="shipstreet"
-                                                  required
+                                                  
                                                   style="background-color: #2f516f;color: white;"></textarea>
                                         <div class="invalid-feedback">Please provide a valid Street</div>
                                     </div>
@@ -1823,7 +2035,7 @@ alert(col1);
                                         <label for="shipcity">City</label>
                                         <input type="text" class="form-control" id="shipcity"
                                                name="shipcity"
-                                               required
+                                               
                                                style="background-color: #2f516f;color: white;" placeholder="City">
                                         <div class="invalid-feedback">Please provide a valid City</div>
                                     </div>
@@ -1832,7 +2044,7 @@ alert(col1);
                                     <div class="form-row">
                                         <label for="shipstate">State</label>
                                         <select type="text" class="form-control" id="plosu" name="shipstate"
-                                                style="background-color: #2f516f; color: white;">
+                                             style="background-color: #2f516f; color: white;">
                                             <option id="shipst" selected>Choose</option>
                                             <option value="Andaman and Nicobar Islads">Andaman and Nicobar Islads
                                             </option>
@@ -1884,7 +2096,7 @@ alert(col1);
                                         <label for="shippinco">Pin Code</label>
                                         <input type="text" class="form-control" id="shippinco"
                                                name="shippincode"
-                                               required style="background-color: #2f516f;color: white;"
+                                                style="background-color: #2f516f;color: white;"
                                                placeholder="PIN code">
                                         <div class="invalid-feedback">Please provide a valid Pin Code</div>
                                     </div>
@@ -1894,7 +2106,7 @@ alert(col1);
                                         <label for="shipcountry">Country</label>
                                         <input type="text" class="form-control" id="shipcountry"
                                                name="shipcountry"
-                                               required style="background-color: #2f516f;color: white;"
+                                                style="background-color: #2f516f;color: white;"
                                                placeholder="Country">
                                         <div class="invalid-feedback">Please provide a valid Country</div>
                                     </div>
@@ -3008,6 +3220,8 @@ alert(col1);
     // });
 
     $('#termadd').on('change', function() {
+
+      
       select = $('#termadd').val();
       $.ajax({
         type: "GET",

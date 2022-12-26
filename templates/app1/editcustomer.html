@@ -50,14 +50,14 @@
                         <div class="col-md-4 mt-3">
                             <label for="validationCustom03">Company</label>
                             <input type="text" class="form-control" value="{{ customer.company }}"
-                                   id="validationCustom03" name="company" required
+                                   id="validationCustom03" name="company" 
                                    style="background-color: #2f516f;color: white;">
                             <div class="valid-feedback">Looks good!</div>
                         </div>
                         <div class="col-md-4 mt-3">
                             <label for="validationCustom03">Location</label>
                             <input type="text" class="form-control" value="{{ customer.location }}"
-                                   id="validationCustom03" name="location" required
+                                   id="validationCustom03" name="location" 
                                    style="background-color: #2f516f;color: white;">
                             <div class="valid-feedback">Looks good!</div>
                         </div>
@@ -67,7 +67,7 @@
                         <div class="col-md-4 mt-3">
                             <label for="validationCustom04">GST type</label>
                             <select class="custom-select" id="validationCustom04" onclick="hidinput('hello', this)"
-                                    name="gsttype" required
+                                    name="gsttype" 
                                     style="background-color: #243e54; color: white;">
                                 <option>{{ customer.gsttype }}</option>
                                 <option>GST registered- Regular</option>
@@ -94,7 +94,7 @@
                             <label for="validationCustom03">PAN NO</label>
                             <input type="text" class="form-control" onchange="checkpan(this)"
                                    value="{{ customer.panno }}"
-                                   id="validationCustom03" name="panno" required
+                                   id="validationCustom03" name="panno" 
                                    style="background-color: #2f516f;color: white;">
                             <div id="warnpan" class="text-danger"></div>
                         </div>
@@ -114,7 +114,7 @@
                         <div class="col-md-4 mt-3">
                             <label for="validationCustom03">Email</label>
                             <input type="email" class="form-control" value="{{ customer.email }}"
-                                   id="validationCustom03" name="email" required
+                                   id="validationCustom03" name="email" 
                                    style="background-color: #2f516f;color: white;">
                             <div class="invalid-feedback">Please provide a valid Email</div>
                         </div>
@@ -129,7 +129,7 @@
                             <label for="validationCustom01">Mobile</label>
                             <input type="text" class="form-control" onchange="checkphone(this)"
                                    value="{{ customer.mobile }}"
-                                   id="validationCustom01" name="mobile" required
+                                   id="validationCustom01" name="mobile" 
                                    style="background-color: #2f516f;color: white;">
                             <div id="warnphone" class="text-danger"></div>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="row">
                                 <div class="col-md-12 mt-3">
                                     <label for="street">Street</label>
-                                    <textarea class="form-control" id="street" name="street" required
+                                    <textarea class="form-control" id="street" name="street" 
                                               style="background-color: #2f516f;color: white;">{{ customer.street }}</textarea>
                                     <div class="invalid-feedback">Please provide a valid Pin Code</div>
                                 </div>
@@ -154,7 +154,7 @@
                                 <div class="col-md-6 mt-3">
                                     <label for="city">City</label>
                                     <input type="text" class="form-control" value="{{ customer.city }}"
-                                           id="city" name="city" required
+                                           id="city" name="city" 
                                            style="background-color: #2f516f;color: white;">
                                     <div class="invalid-feedback">Please provide a valid City</div>
                                 </div>
@@ -170,14 +170,14 @@
                                 <div class="col-md-6 mt-3">
                                     <label for="pinco">Pin Code</label>
                                     <input type="text" class="form-control" value="{{ customer.pincode }}"
-                                           id="pinco" name="pincode" required
+                                           id="pinco" name="pincode" 
                                            style="background-color: #2f516f;color: white;">
                                     <div class="invalid-feedback">Please provide a valid Pin Code</div>
                                 </div>
                                 <div class="col-md-6 mt-3">
                                     <label for="country">Country</label>
                                     <input type="text" class="form-control" value="{{ customer.country }}"
-                                           id="country" name="country" required
+                                           id="country" name="country" 
                                            style="background-color: #2f516f;color: white;">
                                     <div class="invalid-feedback">Please provide a valid Country</div>
                                 </div>
@@ -193,7 +193,7 @@
                                 <div class="col-md-12 mt-3">
                                     <label for="shipstreet">Street</label>
                                     <textarea class="form-control" id="shipstreet" name="shipstreet"
-                                              required
+                                              
                                               style="background-color: #2f516f;color: white;">{{ customer.shipstreet }}</textarea>
                                     <div class="invalid-feedback">Please provide a valid Pin Code</div>
                                 </div>
@@ -202,7 +202,7 @@
                                 <div class="col-md-6 mt-3">
                                     <label for="shipcity">City</label>
                                     <input type="text" class="form-control" value="{{ customer.shipcity }}"
-                                           id="shipcity" name="shipcity" required
+                                           id="shipcity" name="shipcity" 
                                            style="background-color: #2f516f;color: white;">
                                     <div class="invalid-feedback">Please provide a valid City</div>
                                 </div>
@@ -218,14 +218,14 @@
                                 <div class="col-md-6 mt-3">
                                     <label for="shippinco">Pin Code</label>
                                     <input type="text" class="form-control" value="{{ customer.shippincode }}"
-                                           id="shippinco" name="shippincode" required
+                                           id="shippinco" name="shippincode" 
                                            style="background-color: #2f516f;color: white;">
                                     <div class="invalid-feedback">Please provide a valid Pin Code</div>
                                 </div>
                                 <div class="col-md-6 mt-3">
                                     <label for="shipcountry">Country</label>
                                     <input type="text" class="form-control" value="{{ customer.shipcountry }}"
-                                           id="shipcountry" name="shipcountry" required
+                                           id="shipcountry" name="shipcountry" 
                                            style="background-color: #2f516f;color: white;">
                                     <div class="invalid-feedback">Please provide a valid Country</div>
                                 </div>

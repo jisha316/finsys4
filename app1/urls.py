@@ -6,6 +6,7 @@ urlpatterns = [
     re_path(r'^$', views.index, name='index'),
     re_path(r'^go$', views.go, name='go'),
     re_path(r'^Signup_emailval/$', views.Signup_emailval, name='Signup_emailval'),
+    re_path(r'^user_name_check/$', views.user_name_check, name='user_name_check'),
     re_path(r'^godash$', views.godash, name='godash'),
     re_path(r'^logout$', views.logout, name='logout'),
     re_path(r'^something$', views.something, name='something'),
@@ -451,7 +452,7 @@ urlpatterns = [
     path('search_sale',views.search_sale,name='search_sale'),
 
     path('invoice_view/<int:id>',views.invoice_view,name='invoice_view'),
-
+    path('render_pdfinvoice_view/<int:id>',views.render_pdfinvoice_view,name='render_pdfinvoice_view'),
     path('new_customers3',views.new_customers3,name='new_customers3'),
 
     path('sale_create_item',views.sale_create_item,name='sale_create_item'),
@@ -751,7 +752,6 @@ urlpatterns = [
     path('plreport/<str:id>', views.plreport, name='plreport'),
     path('bsreport/<str:id>', views.bsreport, name='bsreport'),
     path('tbreport/<str:id>', views.tbreport, name='tbreport'),
-    path('tbreport1/<str:id>', views.tbreport1, name='tbreport1'),
     path('streport/<str:id>', views.streport, name='streport'),
 
     re_path(r'^demo$', views.demo, name='demo'),
@@ -792,5 +792,30 @@ urlpatterns = [
     re_path(r'^vend_view/(?P<pk>\d+)$',views.vend_view,name='vend_view'),
     re_path(r'^vend_edit/(?P<pk>\d+)$',views.vend_edit,name='vend_edit'),
     re_path(r'^deletevend/(?P<pk>\d+)$',views.deletevend,name='deletevend'),
+    path('bank_recon/<int:pk>', views.bank_recon, name='bank_recon'),
+    path('start_reconcile/<int:pk>', views.start_reconcile, name='start_reconcile'), 
+    path('gettermss/', views.gettermss, name='gettermss'),
+    path('pym_acc_crt/', views.pym_acc_crt, name='pym_acc_crt'),
+    path('paym_acc/', views.paym_acc, name='paym_acc'),
+    path('active_cust/<int:pk>', views.active_cust, name='active_cust'),
+    path('inactive_cust/<int:pk>', views.inactive_cust, name='inactive_cust'),
+    path('credit_note/', views.credit_note, name='credit_note'),
+    path('addpurchasecredit/', views.addpurchasecredit, name='addpurchasecredit'),
+    path('getcustdata/', views.getcustdata, name='getcustdata'),
+    path('create_credit/', views.create_credit, name='create_credit'),
+    path('bnk_disables/<int:pk>', views.bnk_disables, name='bnk_disables'),
+    path('delete_recon/<int:pk>', views.delete_recon, name='delete_recon'),
+    path('render_pdfpayment_view/<int:id>', views.render_pdfpayment_view, name='render_pdfpayment_view'),
+    path('render_pdfestimate_view/<int:id>', views.render_pdfestimate_view, name='render_pdfestimate_view'),
+    path('render_pdfsalesorder_view/<int:id>', views.render_pdfsalesorder_view, name='render_pdfsalesorder_view'),
+
+    
+
+
+
+    # Forgot Password ---------
+      path('Forgote-Password',views.password_change,name='password_change'),
+      path('User-check',views.forgot_password,name='forgot_password'),
+  
     
 ]

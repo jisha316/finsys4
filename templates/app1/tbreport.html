@@ -51,6 +51,18 @@ body{
 .table-row{
         cursor:pointer;
 }
+/* .table-row:hover{
+    background-color: rgb(217, 232, 51);
+} */
+
+/*Resize the wrap to see the search bar change!*/
+.wrap{
+  width: 40%;
+  /* position: absolute;
+  top: 50%;
+  left: 50%; */
+  /* transform: translate(-50%, -50%); */
+}
 
       </style>
 
@@ -104,15 +116,13 @@ body{
                         <div class="row">
                             <div class="col-sm-4">
                                 <label style="text-align:left ">Report period</label><br>
-                                
-                                <select class="form-control" id="filterstyle" onchange="filterDate(this)" list="hosting-plan"
-                                name="reportperiod" type="text">
-                            <option><span class="bx bx-right-arrow-alt"></span>All dates</option>
-                            <option><span class="bx bx-right-arrow-alt"></span>Custom</option>
-                            <option><span class="bx bx-right-arrow-alt"></span>Today</option>
-                            <option><span class="bx bx-right-arrow-alt"></span>This month</option>
-                            <option><span class="bx bx-right-arrow-alt"></span>This financial year</option>
-                        </select>
+                                <input type="text" name="cust" value="{{cust2}}" hidden>
+                                <select class="form-control" id="filterstyle" onchange="filterDate(this)"
+                                        list="hosting-plan"
+                                        name="reportperiod" type="text">
+                                    <option><span class="bx bx-right-arrow-alt"></span>All dates</option>
+                                    <option><span class="bx bx-right-arrow-alt"></span>Custom</option>
+                                    </select>
                             </div>
                             <div class="col-sm-4" id="frdate" style="display: none;">
                                 <label for="from">From</label>

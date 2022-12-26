@@ -42,12 +42,12 @@
                                 <div class="d-flex">
                                     <select name="depto" id="" class="form-control" style="width: 95%;">
                                         <option disabled>Cash</option>
-                                        {% for acc in acc %}
-                                            <option value="{{ acc.name }}">{{ acc.name }}</option>
+                                        {% for a in acc %}
+                                            <option value="{{ a.name }}">{{ a.name }}</option>
                                         {% endfor %}
                                         <option disabled>Bank</option>
-                                        {% for acc in acc1 %}
-                                            <option value="{{ acc.name }}">{{ acc.name }}</option>
+                                        {% for a in acc1 %}
+                                            <option value="{{ a.name }}">{{ a.name }}</option>
                                         {% endfor %}
                                     </select>
                                     <a role="button" class="btn btn-outline-secondary ml-1" data-target="#newaccount" data-toggle="modal">+</a>

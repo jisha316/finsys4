@@ -446,6 +446,17 @@
         .closebtn:hover {
             color: black;
         }
+        .forgot-password
+        {
+            text-decoration: none;
+            font-size: 12px;
+            color: rgb(42, 41, 85);     
+        }
+        .forgot-password:hover
+        {
+            color: rgb(35, 34, 103); 
+            opacity: 0.8;  
+        }
 
     </style>
 </head>
@@ -453,7 +464,7 @@
 <div class="container">
     <div class="forms-container">
         <div class="signin-signup">
-            <form action="login" method="post" class="sign-in-form">
+            <form action="{% url 'login' %}" method="post" class="sign-in-form">
                 {% csrf_token %}
                 {% for message in messages %}
                     {% if message %}
@@ -473,9 +484,10 @@
                     <input type="password" placeholder="Password" name="password" required/>
                 </div>
                 <input type="submit" value="Login" class="btn solid"/>
+                <a href="{% url 'password_change' %}" class="forgot-password">Forgot password...?</a>
                 <msg></msg>
             </form>
-            <form action="create" method="post" class="sign-up-form" onsubmit="return validate()">
+            <form action="{% url 'create' %}" method="post" class="sign-up-form" onsubmit="return validate()">
                 {% csrf_token %}
                 <h2 class="title">Sign up</h2>
 
@@ -493,17 +505,17 @@
                 </div>
                 <div class="input-field">
                     <i class="fas fa-user"></i>
-                    <input type="text" placeholder="Username" name="username" id="user" required/>
+                    <input type="text" placeholder="Username" name="cusername" id="user" required/>
                 </div>
                 <div class="input-field">
                     <i class="fas fa-lock"></i>
                     <input type="password" placeholder="Password" 
-                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"  name="password" id="pwd"/>
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"  name="cpassword" id="pwd"/>
                 </div>
                 <div class="input-field">
                     <i class="fas fa-lock"></i>
                     <input type="password" placeholder="Confirm Password"
-                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"  name="conformpassword" id="cnfpwd"/>
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"  name="cconformpassword" id="cnfpwd"/>
                 </div>
                 <input type="submit" class="btn" value="Sign up"/>
             </form>
@@ -591,6 +603,26 @@ $(document).ready(function(){
 
   });
 });
+$(document).ready(function(){
+    $("#user").change(function () {
+      var user = $(this).val();
+  
+      $.ajax({
+        url: 'user_name_check',
+        data: {
+          'user': user
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            alert("User name already exists.");
+          }
+        }
+      });
+  
+    });
+  });
+
 
 </script>
 </body>

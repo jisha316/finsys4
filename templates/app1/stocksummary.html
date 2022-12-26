@@ -5,10 +5,6 @@
 
 
     <style>
-        #modal1 {
-            margin-left: 660px;
-            margin-top: -30px;
-        }
         .tr{
             cursor: pointer;
         }
@@ -125,10 +121,6 @@
             </div>
         </div>
     </div>
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg"
-         viewBox="0 0 16 16">
-        <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"/>
-    </svg>
 
     <script>
         $(document).ready(function(){
@@ -158,35 +150,8 @@
             });
         });
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>
-        $(function() {
-            $("#tb .1st").each(function() {
-                const val1 = +$(this).text();
-                const val2 = +$(this).next().text();
-                $(this).closest("tr").find(".diff").text(val1 - val2);
-            })
-        })
-    </script>
-
 
     <script>
-        document.getElementById("nb").style.display = "none"
-
-        function showbox() {
-            var x = document.getElementById("nb");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-            }
-        }
-
-        function hidebox() {
-            var x = document.getElementById("nb");
-            if (x.style.display === "block") {
-                x.style.display = "none";
-            }
-        }
-
         function filterDate(element) {
             if (element.value == 'Custom') {
                 document.getElementById('frdate').style.display = 'block';
@@ -197,10 +162,4 @@
             }
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
-            integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
-            integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
-            crossorigin="anonymous"></script>
 {% endblock %}

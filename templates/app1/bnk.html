@@ -342,10 +342,10 @@
 
                     {% for c in c %}
                     {% if c.cid_id == cmp1.cid %}
-                    <tr class="rw" data-href="{% url 'bnk1' c.accounts1id   %}">
+                    <tr class="rw" >
                         <td name="name" id="name"  style="text-align: center;">
                             
-                            {{ c.name }}
+                            <a href="{% url 'bnk1' c.accounts1id %}">{{ c.name }}</a>
                         </td>
                         <td style="text-align: center;">
                         {{ c.acctype }}

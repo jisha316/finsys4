@@ -35,7 +35,7 @@
                                         <option value="a.name">{{a.name}}</option>
                                     {% endfor %}
                                     <option disabled>Other Expenses</option>
-                                    {% for a in acc2 %}
+                                    {% for a in acc1 %}
                                         <option value="a.name">{{a.name}}</option>
                                     {% endfor %}
                                     <!-- <option value="Advertising and Marketing">Advertising and Marketing</option>
@@ -83,7 +83,11 @@
                             <label for="">Paid Through</label>
                             <select class="form-control" name="paidthrough">
                                 <option disabled>Cash</option>
-                                {% for a in acc1 %}
+                                {% for a in acc2 %}
+                                    <option value="{{ a.name }}">{{ a.name }}</option>
+                                {% endfor %}  
+                                <option disabled>Bank</option>
+                                {% for a in acc3 %}
                                     <option value="{{ a.name }}">{{ a.name }}</option>
                                 {% endfor %}  
                             </select>
@@ -1183,18 +1187,5 @@
 
         });
     </script>
-
-    <!-- <script>
-        function calc() {
-            amount = Number($('#amount').val());
-            tax = Number($('#tax1').val());
-            if(amount && tax && !isNaN(amount) && !isNaN(tax)){
-                $('#calc').val(amount * tax);
-            }
-            else {
-                $('#calc').val(0);
-            }
-        }
-    </script> -->
 
 {% endblock %}

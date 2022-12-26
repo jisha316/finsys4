@@ -923,17 +923,14 @@
                                 <div class="col-md-4 mt-2">
                                     <label for="validationCustom02">HSN Code</label>
                                     <input type="text" name="hsn" class="form-control" placeholder="Enter a valid HSN code"
-                                    pattern="[0-9]{8}" maxlength="8" title=" Maximum 8 digits, characters not allowed">
-                                    <a href="https://www.cbic.gov.in/resources//htdocs-cbec/gst/goods-rates-booklet-03July2017.pdf"
-                                        target="_blank" style="font-style: italic"><h6 class="form-card mt-1" style="color: #3dd5f3">
-                                        Not sure about HSN code..? click here</h6>
-                                    </a>
+                                    required>
                                     
                                 </div>
                                 <div class="col-md-3 mt-5"><label for="">Tax Preference : </label></div>
                                 <div class="col-md-2 mt-5">
                                     <div class="form-check">
-                                        <input class="form-check-input" name="taxref" type="checkbox" value="Taxable" >Taxable
+                                        <input class="form-check-input" name="taxref" type="checkbox" value="Taxable" 
+                                        id="inclusive" checked>Taxable
                                     </div>
                                 </div>
                                 <div class="col-md-2 mt-5">
@@ -960,7 +957,7 @@
                                 <div class="col-md-4 mt-2">
                                     <label for="">Account</label>
                                     <select name="pur_account" class="form-control">
-                                        <option >Cost of Goods Sold</option>
+                                        
                                         {% for a in acc1 %}
                                             <option value="goods">{{ a.name }}</option>
                                         {% endfor %}
@@ -988,8 +985,8 @@
                                 <div class="col-md-4 mt-2">
                                     <label for="">Account</label>
                                     <select name="sale_account" class="form-control">
-                                        <option >Cost of Goods Sold</option>
-                                        {% for a in acc1 %}
+                                        
+                                        {% for a in acc2 %}
                                             <option value="goods">{{ a.name }}</option>
                                         {% endfor %}
                                     </select>
@@ -1010,7 +1007,7 @@
                                 <div class="col-md-6 mt-2">
                                     <label for="">Intra State Tax Rate</label>
                                     <select name="intra_st" class="form-control">
-                                        <option selected disabled>Choose...</option>
+                                        <option selected >Choose...</option>
                                         <option value=0>GST 0 (0%)</option>
                                         <option value=5>GST 5 (5%)</option>
                                         <option value=12>GST 12 (12%)</option>
@@ -1022,7 +1019,7 @@
                                 <div class="col-md-6 mt-2">
                                     <label for="">Inter State Tax Rate</label>
                                     <select name="inter_st" class="form-control">
-                                        <option selected disabled>Choose...</option>
+                                        <option selected>Choose...</option>
                                         <option value=0>IGST 0 (0%)</option>
                                         <option value=5>IGST 5 (5%)</option>
                                         <option value=12>IGST 12 (12%)</option>
@@ -1048,13 +1045,13 @@
                                 <div class="col-md-6 mt-2">
                                     <label for="">Inventory Account</label>
                                     <select name="invacc" class="form-control">
-                                        <option selected disabled>Choose...</option>
+                                        <option selected value="">Choose...</option>
                                         <option value="Inventory Assets">Inventory Assets</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6 mt-2">
                                     <label for="">Stock on hand</label>
-                                    <input type="number" name="stock" class="form-control">
+                                    <input type="number" name="stock" value="0" class="form-control">
                                 </div>
                             
                             </div>
@@ -1065,7 +1062,8 @@
                                 </div>
                                 <div class="col-md-4 mt-2">
                                     <div class="form-check">
-                                        <input class="form-check-input" value="Active" type="radio" name="status" id="flexRadioDefault1">
+                                        <input class="form-check-input" value="Active" type="radio" 
+                                        name="status" id="flexRadioDefault1" checked>
                                         <label class="form-check-label" for="flexRadioDefault1">
                                         Active
                                         </label>

@@ -186,7 +186,7 @@
                             </div>
                             <div class="col-md-3 mt-2">
                                 <label for="">Expected Deliver Date</label>
-                                <input type="date" class="form-control" value="{{ pbill.deliver_date }}" name="deliver_date">
+                                <input type="date" class="form-control" value="{{ pbill.deliver_date | date:'Y-m-d' }}" name="deliver_date">
                             </div>
                             <div class="col-md-3 mt-2">
                                 <label for="">Credit Period</label>

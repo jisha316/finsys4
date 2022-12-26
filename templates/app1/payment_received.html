@@ -53,7 +53,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <label class="col-form-label">Payment Date</label>
-                                <input type="text" name="paymdate" value="{{ tod }}" class="form-control">
+                                <input type="date" name="paymdate" value="{{ tod }}" class="form-control">
                             </div>
                             <div class="col-md-8"></div>
                         </div>
@@ -69,11 +69,13 @@
                                 <label class="col-form-label">Payment Method</label>
                                 <select name="pmethod" id="paymeth" onclick="showinp('newmethod', this)"
                                         class="form-control">
-                                    <option id="newmth"></option>
+                                        <option value="Bank">Bank</option>
+                                    
                                     <option value="Cash">Cash</option>
                                     <option value="Cheque">Cheque</option>
                                     <option value="Credit Card">Credit Card</option>
                                     <option value="Add New">Add New</option>
+                                    <option id="newmth"></option>
                                 </select>
                             </div>
                             <div class="col-md-4">
@@ -82,10 +84,16 @@
                                 <label class="col-form-label">Deposit to</label>
                                 <div class="d-flex">
                                     <select name="depto" id="" class="form-control" style="width: 95%;">
-                                        {% for acc in accoun %}
+                                        {% for acc in acounts_bnk %}
                                             <option value="{{ acc.name }}">{{ acc.name }}</option>
                                         {% endfor %}
-                                        <option value="BANK">BANK</option>
+                                        {% for acc2 in acounts_cash %}
+                                            <option value="{{ acc2.name }}">{{ acc2.name }}</option>
+                                        {% endfor %}
+                                        {% for acc3 in acounts_undep %}
+                                            <option value="{{ acc3.name }}">{{ acc3.name }}</option>
+                                        {% endfor %}
+                                        
                                         <!-- <option value="Deferred GST Input Credit">Deferred GST Input Credit</option>
                                         <option value="Deferred IGST">Deferred IGST</option>
                                         <option value="Deferred Krishi Kalyan Cess Input Credit">Deferred Krishi
@@ -106,7 +114,7 @@
                                         <option value="Uncategorised Asset">Uncategorised Asset</option>
                                         <option value="Undeposited Fund">Undeposited Fund</option> -->
                                     </select>
-                                    <a href="{% url 'paymentcoacreate' %}"><button type="button" class="btn btn-outline-secondary ml-1">+</button></a>
+                                    <a href="{% url 'paym_acc' %}"><button type="button" class="btn btn-outline-secondary ml-1">+</button></a>
                                 </div>
                             </div>
                         </div>
@@ -257,7 +265,7 @@
                                 `
                              <tr id='addr1' >
                                         <td>1</td>
-                                        <td><input type="text" name="invdate[]" id=""
+                                        <td><input type="text" name="invdate[]" id="" style="margin-top:41px"
                                                    value="${date}" class="form-control"/><br>
                                             <input type="text" name="duedate[]" 
                                                    value="${date}"hidden> <span >duedate : ${date} </span>
@@ -286,7 +294,7 @@
                                 `
                              <tr id='addr1' >
                                         <td>${i+2}</td>
-                                        <td><input type="text" name="invdate[]" id=""
+                                        <td><input type="text" name="invdate[]" id="" style="margin-top:41px"
                                                    value="${data[i].invoicedate}" class="form-control"/><br>
                                             <input type="text" name="duedate[]" 
                                                    value="${data[i].duedate}"hidden> <span >duedate : ${data[i].duedate} </span>
@@ -320,7 +328,7 @@
                                 `
                              <tr id='addr1' >
                                         <td>${i+1}</td>
-                                        <td><input type="text" name="invdate[]" id=""
+                                        <td><input type="text" name="invdate[]" id="" style="margin-top:41px"
                                                    value="${data[i].invoicedate}" class="form-control"/><br>
                                             <input type="text" name="duedate[]" 
                                                    value="${data[i].duedate}"hidden> <span >duedate : ${data[i].duedate} </span>

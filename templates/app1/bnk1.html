@@ -1087,7 +1087,7 @@
             </div>
             <div class="modal-body">
                 <div class="card p-3 m-3">
-                    <form action="{% url 'customers' %}" method="post" class="needs-validation" novalidate>
+                    <form action="{% url 'customers' %}" autocomplete="off" method="post" class="needs-validation" novalidate>
                         {% csrf_token %}
                         
                             <div class="row">
@@ -1124,7 +1124,7 @@
                                 <div class="col-md-4 mt-3">
                                     <label for="validationCustom03">Location</label>
                                     <input type="text" class="form-control" id="validationCustom03" name="location"
-                                           required style="background-color: #2f516f;color: white;">
+                                           style="background-color: #2f516f;color: white;">
                                     <div class="valid-feedback">Looks good!</div>
                                 </div>
                                 <div class="col-md-4 mt-3"></div>
@@ -1191,7 +1191,7 @@
                                 <div class="col-md-4 mt-3">
                                     <label for="validationCustom03">PAN NO</label>
                                     <input type="text" class="form-control" id="validationCustom03" name="panno"
-                                           required style="background-color: #2f516f;color: white;"
+                                            style="background-color: #2f516f;color: white;"
                                            onchange="checkpan(this)" placeholder="APPCK7465F">
                                     <div class="text-danger m-2" id="warnpan"></div>
                                 </div>
@@ -1248,7 +1248,7 @@
                                 <div class="col-md-4 mt-3">
                                     <label for="validationCustom03">Email</label>
                                     <input type="email" class="form-control" id="validationCustom03" name="email"
-                                           required style="background-color: #2f516f;color: white;"
+                                            style="background-color: #2f516f;color: white;"
                                            placeholder="finsys@mail.com">
                                     <div class="invalid-feedback">Please provide a valid Email</div>
                                 </div>
@@ -1263,7 +1263,7 @@
                                     <label for="validationCustom01">Mobile</label>
                                     <input type="text" class="form-control" id="validationCustom01"
                                            onchange="checkphone(this)" name="mobile"
-                                           required style="background-color: #2f516f;color: white;">
+                                           style="background-color: #2f516f;color: white;">
                                     <div class="text-danger m-2" id="warnphone"></div>
                                 </div>
                             </div>
@@ -1280,7 +1280,7 @@
                                             <div class="form-row">
                                                 <label for="street">Street</label>
                                                 <textarea class="form-control street" id="streets" name="street"
-                                                          required
+                                                         
                                                           style="background-color: #2f516f;color: white;"></textarea>
                                                 <div class="invalid-feedback">Please provide a valid Street</div>
                                             </div>
@@ -1292,7 +1292,7 @@
                                                 <label for="city">City</label>
                                                 <input type="text" class="form-control" id="citys"
                                                        name="city"
-                                                       required
+                                                      
                                                        style="background-color: #2f516f;color: white;" placeholder="City">
                                                 <div class="invalid-feedback">Please provide a valid City</div>
                                             </div>
@@ -1301,7 +1301,7 @@
                                             <div class="form-row">
                                                 <label for="state">State</label>
                                                 <select type="text" class="form-control" id="states" name="state"
-                                                        style="background-color: #2f516f; color: white;">
+                                                    required style="background-color: #2f516f; color: white;">
                                                     <option value="" disabled selected>Choose</option>
                                                     <option value="Andaman and Nicobar Islads">Andaman and Nicobar Islads
                                                     </option>
@@ -1353,7 +1353,7 @@
                                                 <label for="pinco">Pin Code</label>
                                                 <input type="text" class="form-control" id="pincoss"
                                                        name="pincode"
-                                                       required style="background-color: #2f516f;color: white;"
+                                                        style="background-color: #2f516f;color: white;"
                                                        placeholder="PIN code">
                                                 <div class="invalid-feedback">Please provide a valid Pin Code</div>
                                             </div>
@@ -1363,7 +1363,7 @@
                                                 <label for="country">Country</label>
                                                 <input type="text" class="form-control" id="countrys"
                                                        name="country"
-                                                       required style="background-color: #2f516f;color: white;"
+                                                        style="background-color: #2f516f;color: white;"
                                                        placeholder="Country">
                                                 <div class="invalid-feedback">Please provide a valid Country</div>
                                             </div>
@@ -1385,7 +1385,7 @@
                                                 <label for="shipstreet">Street</label>
                                                 <textarea class="form-control"  id="shipstreets"
                                                           name="shipstreet" 
-                                                          required
+                                                          
                                                           style="background-color: #2f516f;color: white;"></textarea>
                                                 <div class="invalid-feedback">Please provide a valid Street</div>
                                             </div>
@@ -1397,7 +1397,7 @@
                                                 <label for="shipcity">City</label>
                                                 <input type="text" class="form-control" id="shipcitys"
                                                        name="shipcity"
-                                                       required
+                                                       
                                                        style="background-color: #2f516f;color: white;" placeholder="City">
                                                 <div class="invalid-feedback">Please provide a valid City</div>
                                             </div>
@@ -1468,7 +1468,7 @@
                                                 <label for="shipcountry">Country</label>
                                                 <input type="text" class="form-control" id="shipcountrys"
                                                        name="shipcountry"
-                                                       required style="background-color: #2f516f;color: white;"
+                                                        style="background-color: #2f516f;color: white;"
                                                        placeholder="Country">
                                                 <div class="invalid-feedback">Please provide a valid Country</div>
                                             </div>
@@ -1506,14 +1506,10 @@
 
 
 
-
-
-
-
-
-
-
+       
         <div style="text-align: right;" class="dropdown ">
+            <a href="" class="btn" style="color: black;"  data-target="#bnk_rec"
+                data-toggle="modal" ><button  class=" btn btn-info">Bank Reconcilation</button></a>
             <button  class=" btn btn-info dropdown-toggle" href="" data-toggle="dropdown" data-flip="false"  >Add Transactions</button>
             <div class="dropdown-menu PerfectScrollbar " style="background-color:white;">
                 
@@ -1543,6 +1539,67 @@
         </div>
         <hr><br><br>
 
+        <div class="modal fade" id="bnk_rec">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content" style="background-color: #213b52;">
+                    <div class="modal-header">
+                        <h3 class="m-3">Bank Reconcilation</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card p-3 m-3">
+                            <form method="post" action="{% url 'bank_recon' bk.accounts1id %}">
+                                {% csrf_token %}
+                                <div class="row mt-2 mb-2">
+                                    <div class="col-md-12" style="margin: 0 auto;">
+    
+                                        <label for="">Start Date:</label>
+                                        <input type="date" class="form-control" name="st_dt" required>
+                                    </div>
+                                    
+                                </div>
+                                <br>
+                                <div class="row mt-2 mb-2">
+                                    <div class="col-md-12" style="margin: 0 auto;">
+                                        <label for="">End Date:</label>
+                                        <input type="date" class="form-control" name="end_dt" required>
+    
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row mt-2 mb-2" >
+                                    <div class="col-md-12" style="margin: 0 auto;">
+                                        <label for="">Closing Balance:</label>
+                                        <div class="d-flex" >
+                                            <div style="background-color: rgb(255 255 255 / 14%); width: 35px;">
+                                            <h4 style="padding-top: 4px; padding-left: 10px;">₹</h4>
+                                            </div>
+                                            <input type="number" class="form-control" name="cl_bal" required>
+                                        </div>
+                                        
+    
+                                    </div>
+                                </div><br>
+
+                                <div class="col-md-4"></div>
+                                <div class="col-md-12" style="margin: 0 auto;">
+                                    <button class="btn btn-outline-info rounded-pill text-grey w-100 mt-3 mb-3"
+                                            type="submit">
+                                        Submit form
+                                    </button>
+                                </div>
+    
+                                
+    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
        
        
 <div class="container">
@@ -1568,48 +1625,72 @@
                     <th>Withdrawal</th>
                     <th>Running Balance</th>
                 </tr>
-                {% for pym in cust_pym %}
-                {% if pym.cid_id == cmp1.cid %}
-                <tr style="text-align:center ;" class="rw" data-href="">
+                {% for pym in bnk_pym %}
+                    {% if pym.cid_id == cmp1.cid %}
+                    <tr style="text-align:center ;" class="rw" data-href="">
 
-                    <td>{{ pym.date }}</td>
-                    
-                    <td><a href="{% url 'cus_view' pym.customerpymid %}" >Customer Payment:<br>{{ pym.customer }}</a> </td>
-                    <td>{{ pym.amount_received }}</td>
-                    <td></td>
-                    <td>{{ pym.running_bal }}</td>
-                    
-                </tr>
-                {% endif %}
+                        {%if pym.pym_type == cust %}
+                            {%if pym.status == recon %}
+
+                                <td>{{ pym.date }}</td>
+                                    
+                                <td>{{ pym.pym_type }}<br>{{ pym.customer }}</td>
+                                <td>{{ pym.amount_received }}</td>
+                                <td></td>
+                                <td>{{ pym.running_bal }}</td>
+                            {% else %}
+
+                                <td>{{ pym.date }}</td>
+                                
+                                <td><a href="{% url 'cus_view' pym.bnkpymid %}" >{{ pym.pym_type }}<br>{{ pym.customer }}</a> </td>
+                                <td>{{ pym.amount_received }}</td>
+                                <td></td>
+                                <td>{{ pym.running_bal }}</td>
+                            {%endif%}
+
+                        {% elif pym.pym_type == vend %}
+                            {%if pym.status == recon %}
+                                <td>{{ pym.date }}</td>
+
+                                <td>{{ pym.pym_type }}<br>{{ pym.vendor }}</td>
+                                <td></td>
+
+                                <td>{{ pym.amount_received }}</td>
+                                <td>{{ pym.running_bal }}</td>
+                            {% else %}
+                                <td>{{ pym.date }}</td>
+
+                                <td><a href="{% url 'vend_view' pym.bnkpymid %}" >{{ pym.pym_type }}<br>{{ pym.vendor }}</a> </td>
+                                <td></td>
+
+                                <td>{{ pym.amount_received }}</td>
+                                <td>{{ pym.running_bal }}</td>
+                            {%endif%}
+
+                        {% elif pym.pym_type == exp %}
+                            {%if pym.status == recon %}
+                                <td>{{ pym.date }}</td>
+
+                                <td>{{ pym.pym_type }}<br>{{ pym.expenseaccount }}</td>
+                                <td></td>
+                                <td>{{ pym.amount_received }}</td>
+                                <td>{{ pym.running_bal }}</td>
+                            {% else %}
+                                <td>{{ pym.date }}</td>
+
+                                <td><a href="{% url 'exp_view' pym.bnkpymid %}" >{{ pym.pym_type }}<br>{{ pym.expenseaccount }}</a> </td>
+                                <td></td>
+                                <td>{{ pym.amount_received }}</td>
+                                <td>{{ pym.running_bal }}</td>
+
+                            {% endif %}  
+                        {% endif %}
+
+                    </tr>
+                    {% endif %}
                 {% endfor %}
 
-                {% for pym2 in pym_item %}
-                {% if pym2.cid_id == cmp1.cid %}
-                <tr style="text-align:center ;" class="rw">
-
-                    <td>{{ pym2.date }}</td>
-                    <td><a href="{% url 'vend_view' pym2.vendorpymid %}"  >Vendor Payment:<br>{{ pym2.vendor }}</a></td>
-                    <td></td>
-                    <td>{{ pym2.amount_received }}</td>
-                    <td>{{ pym2.running_bal }}</td>
-                    
-                </tr>
-                {% endif %}
-                {% endfor %}
                 
-                {% for exp in exppenses %}
-                {% if exp.cid_id == cmp1.cid %}
-                <tr style="text-align:center ;" class="rw">
-                    <!-- data-id="1" data-dismiss="modal"  data-target="#edit_section_exp "data-toggle="modal" -->
-                    <td>{{ exp.date }}</td>
-                    <td><a href="{% url 'exp_view' exp.expenseid %}" >Expense:<br>{{ exp.expenseaccount }}</a></td>
-                    <td></td>
-                    <td>{{ exp.amount }}</td> 
-                    <td>{{ exp.running_bal }}</td>
-                    
-                </tr>
-                {% endif %}
-                {% endfor %}
 
 
                 <tr>
