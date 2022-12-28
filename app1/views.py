@@ -30440,7 +30440,15 @@ def stock_adjustpage(request):
         context = {'cmp1':cmp1,'acc':acc,'item':item,'reason':reason}
         return render(request, 'app1/add_stock_adjust.html',context)  
     except:
-        return redirect('gostock_adjust')             
+        return redirect('gostock_adjust')   
+
+@login_required(login_url='regcomp')
+def demo(request):
+    try:
+        cmp1 = company.objects.get(id=request.session['uid'])
+        return render(request, 'app1/demo.html',{'cmp1':cmp1})  
+    except:
+        return redirect('demo')             
 
 
 def getit(request):
@@ -30682,36 +30690,15 @@ def stocksummary(request):
         cmp1 = company.objects.get(id=request.session["uid"])
 
         item = itemtable.objects.filter(cid=cmp1)
-        st1=0
-        st2=0
-        st3=0
+
+        # for i in item:
+        #     iname = i.name
+
+        #     st = stockadjust.objects.filter(item1=iname,cid=cmp1)
+
+        # st1=st
         
-        for i in item:
-            if i.stock:
-                st1+=i.stock
-            if i.stockout:
-                st2+=i.stockout
-            st3=st1-st2
-
-        qtyin1 = purchasebill_item.objects.filter().aggregate(t2=Sum('quantity'))
-
-        qtyout1=0
-        tot3=0
-        tot4=0
-
-        bitm = purchasedebit1.objects.filter()
-        for j in bitm :
-            if j.quantity:
-                tot3+=j.quantity
-
-        initm = invoice_item.objects.filter()
-        for j in initm :
-            if j.qty:
-                tot4+=j.qty
-
-        qtyout1 = tot3+tot4
-        
-        context = {'item':item,'cmp1':cmp1,'qtyin1':qtyin1,'qtyout1':qtyout1,'st3':st3}
+        context = {'item':item,'cmp1':cmp1}
         return render(request, 'app1/stocksummary.html', context)
         
 @login_required(login_url='regcomp')

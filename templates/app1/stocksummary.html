@@ -103,6 +103,14 @@
                                                 <td class="center text-dark">{{i.stock}}</td>       
                                             </tr>
                                         {% endfor %}
+                                        <!-- {% for i in st1 %}
+                                            <tr class="tr" onclick="window.location='streport/{{ i.name }} ';">
+                                                <td class="center text-dark">{{ i.item1 }}</td>
+                                                <td class="center text-dark 1st">{{ i.qty1 }}</td>  
+                                                <td class="center text-dark"></td>         
+                                                <td class="center text-dark">{{ i.qty_hand1 }}</td>       
+                                            </tr>
+                                        {% endfor %} -->
                                         <thead>
                                             <tr>
                                                 <th class="center font-weight-dark border-dark" style="color: black;">TOTAL</th>
@@ -114,7 +122,6 @@
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
                     </div>
                 </div>
