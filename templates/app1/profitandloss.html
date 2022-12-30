@@ -3,16 +3,11 @@
     {% load static %}
 
     <style>
-        #modal1 {
-            margin-left: 660px;
-            margin-top: -30px;
-        }
         .tr{
             cursor:pointer;
         }
     </style>
-    <body>
-    <br><br>
+    
     <div class="card radius-15">
         <div class="card-body">
             <div class="card-title">
@@ -29,7 +24,7 @@
                     <div class="col-sm-4">
                         <label style="text-align:left ">Report period</label><br>
                         <select class="form-control" id="filterstyle" onchange="filterDate(this)" list="hosting-plan"
-                                name="reportperiod" type="text">
+                                name="reportperiod">
                             <option><span class="bx bx-right-arrow-alt"></span>All Dates</option>
                             <option><span class="bx bx-right-arrow-alt"></span>Custom</option>
                             <option><span class="bx bx-right-arrow-alt"></span>Today</option>

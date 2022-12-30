@@ -3521,7 +3521,7 @@ def invcreate2(request):
             mapped=zip(product,qty)
             mapped=list(mapped)
             for ele in mapped:
-                iAdd,created = item.objects.get_or_create(items = ele[0],qty = ele[1],transactions="Invoice",details=dl,
+                iAdd,created = item1.objects.get_or_create(items = ele[0],qty = ele[1],transactions="Invoice",details=dl,
                 date=dt,inv=invoiceid,cid=cmp1)
 
         if len(product)==len(hsn)==len(description)==len(qty)==len(price)==len(tax)==len(total) and product and hsn and description and qty and price and tax and total:
@@ -30693,9 +30693,7 @@ def stocksummary(request):
 
         # for i in item:
         #     iname = i.name
-
         #     st = stockadjust.objects.filter(item1=iname,cid=cmp1)
-
         # st1=st
         
         context = {'item':item,'cmp1':cmp1}
@@ -30714,9 +30712,9 @@ def stocksummary1(request):
         elif filmeth == 'Custom':
             fromdate = request.POST['fper']
             todate = request.POST['tper']
-        # elif filmeth == 'This month':
-        #     fromdate = toda.strftime("%Y-%m-01")
-        #     todate = toda.strftime("%Y-%m-31")
+        elif filmeth == 'This month':
+            fromdate = toda.strftime("%Y-%m-01")
+            todate = toda.strftime("%Y-%m-31")
         elif filmeth == 'This financial year':
             if int(toda.strftime("%m")) >= 1 and int(toda.strftime("%m")) <= 3:
                 pyear = int(toda.strftime("%Y")) - 1
@@ -30731,25 +30729,7 @@ def stocksummary1(request):
 
         item = itemtable.objects.filter(itmdate__gte=fromdate, itmdate__lte=todate)
 
-        qtyin1 = purchasebill_item.objects.filter().aggregate(t2=Sum('quantity'))
-
-        qtyout1=0
-        tot3=0
-        tot4=0
-
-        bitm = purchasedebit1.objects.filter()
-        for j in bitm :
-            if j.quantity:
-                tot3+=j.quantity
-
-        initm = invoice_item.objects.filter()
-        for j in initm :
-            if j.qty:
-                tot4+=j.qty
-
-        qtyout1 = tot3+tot4
-        
-        context = {'item':item,'cmp1':cmp1,'qtyin1':qtyin1,'qtyout1':qtyout1}
+        context = {'item':item,'cmp1':cmp1}
         return render(request, 'app1/stocksummary.html', context)
 
 def streport(request,id):
@@ -30765,7 +30745,7 @@ def streport(request,id):
 
         to=toda.strftime("%d-%m-%Y")
 
-        acc = item.objects.filter(items=id,cid=cmp1)
+        acc = item1.objects.filter(items=id,cid=cmp1)
 
         debit=0
         credit=0
@@ -30788,6 +30768,19 @@ def streport(request,id):
         context = {'acc':acc, 'cmp1':cmp1, 'to':to, 'fdate':fdate, 'ldate':ldate, 'debit':debit, 'credit':credit, 'total':total}
         return render(request, 'app1/streport.html', context)
     return redirect('/')  
+
+@login_required(login_url='regcomp')
+def stockvaluation(request):
+        cmp1 = company.objects.get(id=request.session["uid"])
+        item =itemtable.objects.filter(cid=cmp1)
+
+        item = itemtable.objects.filter(cid=cmp1).exclude(inventry="").annotate(total=F('stock')*F('purchase_cost'))
+        stock = stockadjust.objects.filter(cid=cmp1)
+        stock1 = purchasebill_item.objects.filter(cid=cmp1)
+        
+        context = {'item': item,'stock':stock,'cmp1':cmp1}
+        return render(request, 'app1/stockvaluation.html', context)
+
         
 @login_required(login_url='regcomp')
 def stockvaluation1(request):
@@ -30818,15 +30811,6 @@ def stockvaluation1(request):
             return redirect('stockvaluation')
 
         item = itemtable.objects.filter(cid=cmp1,itmdate__gte=fromdate, itmdate__lte=todate).exclude(inventry="").annotate(total=F('stock')*F('purchase_cost'))
-        stock = stockadjust.objects.filter(cid=cmp1)
-        
-        context = {'item': item,'stock':stock,'cmp1':cmp1}
-        return render(request, 'app1/stockvaluation.html', context)
-
-@login_required(login_url='regcomp')
-def stockvaluation(request):
-        cmp1 = company.objects.get(id=request.session["uid"])
-        item = itemtable.objects.filter(cid=cmp1).exclude(inventry="").annotate(total=F('stock')*F('purchase_cost'))
         stock = stockadjust.objects.filter(cid=cmp1)
         
         context = {'item': item,'stock':stock,'cmp1':cmp1}
@@ -32834,11 +32818,11 @@ def createbill(request):
             ref=billed.reference
             dt=billed.date
 
-            if len(items)==len(quantity) and items and quantity:
-                mapped=zip(items,quantity)
+            if len(items)==len(quantity)==len(amount) and items and quantity and amount:
+                mapped=zip(items,quantity,amount)
                 mapped=list(mapped)
                 for ele in mapped:
-                    billAdd,created = item.objects.get_or_create(items = ele[0],qty = ele[1],transactions='Billed',details=dl,
+                    billAdd,created = item1.objects.get_or_create(items = ele[0],qty = ele[1],amount = ele[2],transactions='Billed',details=dl,
                     date=dt,details1=ref,bill=bll,cid=cmp1)
 
             if len(items)==len(hsn)==len(quantity)==len(rate)==len(tax)==len(amount) and items and hsn and quantity and rate and tax and amount:
@@ -33091,6 +33075,17 @@ def editpurchasebill(request,id):
             bitmid = request.POST.getlist("id[]")
 
             billid=purchasebill.objects.get(billid=pbill.billid,cid=cmp1)
+
+            dl=pbill.bill_no
+            ref=pbill.reference
+            dt=pbill.date
+
+            if len(items)==len(quantity)==len(amount)==len(bitmid) and items and quantity and amount and bitmid:
+                mapped=zip(items,quantity,amount,bitmid)
+                mapped=list(mapped)
+                for ele in mapped:
+                    created = item1.objects.filter(id=ele[3]).update(items = ele[0],qty=ele[1],amount=ele[2],transactions='Billed',details=dl,
+                    date=dt,details1=ref)
 
             if len(items)==len(hsn)==len(quantity)==len(rate)==len(tax)==len(amount)==len(bitmid) and items and hsn and quantity and rate and tax and amount and bitmid:
                 mapped=zip(items,hsn,quantity,rate,tax,amount,bitmid)

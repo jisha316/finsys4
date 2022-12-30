@@ -3,11 +3,6 @@
 {% load static %}
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
-
-
-
-
-
 <style>
   input {
     background-color: #2f516f;
@@ -19,7 +14,7 @@
     display:none;
   }
 </style>
-<form action="create_stock_adjustment" method="post" class="needs-validation" enctype="multipart/form-data"  validate >{% csrf_token %}
+<form action="create_stock_adjustment" method="post" class="needs-validation" enctype="multipart/form-data" autocomplete="off"  validate >{% csrf_token %}
         
     <div class="page-content">
         <h2 id="hel"></h2>
@@ -114,7 +109,7 @@
             <div class="col-md-12 table-responsive-md mt-3">
               <table class="table table-bordered table-hover mt-3" id="tab_logic">
                 <thead>
-                  <tr id>
+                  <tr>
                     <th  class="text-center" >#</th>
                     <th class="text-center" >Item details</th>
                     <th class="text-center">Quandity Available</th>
@@ -315,232 +310,194 @@
             </div>
         </form>
         </div>
- 
     </div>
-</div>            
+  </div>            
 
 
 
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-
-
-
-            <script>
-                $('#date').val(new Date().toJSON().slice(0,10));
-            </script>
-
-
-            <script>
-                $(document).ready(function () {
-                    $('#itemss').on('change', function () {
-                        select = $('#itemss').val();
-                        $.ajax({
-                            type: "GET",
-                            url: "{% url 'getit' %}",
-                            data: {id: select}
-                        }).done(function (response) {
-                            var json_data = JSON.parse(response);
-                            for (key in json_data) {
-                                document.getElementById('qty').value = json_data[key]['stock']
-                               
-                            }
-                        }).fail(function () {
-                            alert("failed");
-                        })
-                    })
-                })
-            </script>
-            <script>
-              $(document).ready(function () {
-                  $('#itemss1').on('change', function () {
-                      select = $('#itemss1').val();
-                      $.ajax({
-                          type: "GET",
-                          url: "{% url 'getit' %}",
-                          data: {id: select}
-                      }).done(function (response) {
-                          var json_data = JSON.parse(response);
-                          for (key in json_data) {
-                              document.getElementById('qty1').value = json_data[key]['stock']
-                             
-                          }
-                      }).fail(function () {
-                          alert("failed");
-                      })
-                  })
-              })
-          </script>
-          <script>
-            $(document).ready(function () {
-                $('#itemss2').on('change', function () {
-                    select = $('#itemss2').val();
-                    $.ajax({
-                        type: "GET",
-                        url: "{% url 'getit' %}",
-                        data: {id: select}
-                    }).done(function (response) {
-                        var json_data = JSON.parse(response);
-                        for (key in json_data) {
-                            document.getElementById('qty2').value = json_data[key]['stock']
-                           
-                        }
-                    }).fail(function () {
-                        alert("failed");
-                    })
-                })
-            })
-        </script>
-        <script>
-          $(document).ready(function () {
-              $('#itemss4').on('change', function () {
-                  select = $('#itemss4').val();
-                  $.ajax({
-                      type: "GET",
-                      url: "{% url 'getit' %}",
-                      data: {id: select}
-                  }).done(function (response) {
-                      var json_data = JSON.parse(response);
-                      for (key in json_data) {
-                          document.getElementById('qty4').value = json_data[key]['stock']
-                         
-                      }
-                  }).fail(function () {
-                      alert("failed");
-                  })
-              })
-          })
-      </script>
-      <script>
-        $(document).ready(function () {
-            $('#itemss3').on('change', function () {
-                select = $('#itemss3').val();
-                $.ajax({
-                    type: "GET",
-                    url: "{% url 'getit' %}",
-                    data: {id: select}
-                }).done(function (response) {
-                    var json_data = JSON.parse(response);
-                    for (key in json_data) {
-                        document.getElementById('qty3').value = json_data[key]['stock']
-                       
-                    }
-                }).fail(function () {
-                    alert("failed");
-                })
-            })
-        })
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script>
+      $('#date').val(new Date().toJSON().slice(0,10));
     </script>
-
-
-            <script>
-              $(document).ready(function(){
-                $("#qty,#qty_hand").keyup(function(){
-
-                  var total = 0;
-                  var x = Number($("#qty").val());
-                  var y = Number($("#qty_hand").val());
-                  var total = y - x;
-                  $("#nqty").val(total);
-                });
-              });
-            </script>
-            <script>
-              $(document).ready(function(){
-                $("#qty1,#qty_hand1").keyup(function(){
-
-                  var total = 0;
-                  var x = Number($("#qty1").val());
-                  var y = Number($("#qty_hand1").val());
-                  var total = y - x;
-                  $("#nqty1").val(total);
-                });
-              });
-            </script>
-            <script>
-              $(document).ready(function(){
-                $("#qty2,#qty_hand2").keyup(function(){
-
-                  var total = 0;
-                  var x = Number($("#qty2").val());
-                  var y = Number($("#qty_hand2").val());
-                  var total = y - x;
-                  $("#nqty2").val(total);
-                });
-              });
-            </script>
-            <script>
-              $(document).ready(function(){
-                $("#qty3,#qty_hand3").keyup(function(){
-
-                  var total = 0;
-                  var x = Number($("#qty3").val());
-                  var y = Number($("#qty_hand3").val());
-                  var total = y - x;
-                  $("#nqty3").val(total);
-                });
-              });
-            </script>
-            <script>
-              $(document).ready(function(){
-                $("#qty4,#qty_hand4").keyup(function(){
-
-                  var total = 0;
-                  var x = Number($("#qty4").val());
-                  var y = Number($("#qty_hand4").val());
-                  var total = y - x;
-                  $("#nqty4").val(total);
-                });
-              });
-            </script>
-
-            
-            <script>
-            function showDiv() {
-
-              document.querySelector(".row1").style.display = "table-row";
-              
+    <script>
+      $(document).ready(function () {
+        $('#itemss').on('change', function () {
+          select = $('#itemss').val();
+          $.ajax({
+            type: "GET",
+            url: "{% url 'getit' %}",
+            data: {id: select}
+          }).done(function (response) {
+            var json_data = JSON.parse(response);
+            for (key in json_data) {
+              document.getElementById('qty').value = json_data[key]['stock']
             }
-           
-            
-          </script>
-          <script>
-            function showDiv1() {
-
-              document.querySelector(".row2").style.display = "table-row";
-              
+          }).fail(function () {
+            alert("failed");
+          })
+        })
+      })
+    </script>
+    <script>
+      $(document).ready(function () {
+        $('#itemss1').on('change', function () {
+          select = $('#itemss1').val();
+          $.ajax({
+            type: "GET",
+            url: "{% url 'getit' %}",
+            data: {id: select}
+          }).done(function (response) {
+            var json_data = JSON.parse(response);
+            for (key in json_data) {
+              document.getElementById('qty1').value = json_data[key]['stock']
             }
-          </script>
-          <script>
-           
-            function showDiv2() {
-
-              document.querySelector(".row3").style.display = "table-row";
-              
+          }).fail(function () {
+            alert("failed");
+          })
+        })
+      })
+    </script>
+    <script>
+      $(document).ready(function () {
+        $('#itemss2').on('change', function () {
+          select = $('#itemss2').val();
+          $.ajax({
+          type: "GET",
+          url: "{% url 'getit' %}",
+          data: {id: select}
+        }).done(function (response) {
+          var json_data = JSON.parse(response);
+            for (key in json_data) {
+              document.getElementById('qty2').value = json_data[key]['stock']
             }
-          </script>
-          <script>
-           
-            function showDiv3() {
-
-              document.querySelector(".row4").style.display = "table-row";
-              
-            }
-          </script>
-         <script>
-            function remove1() {
-              $("#row1").remove();
-            }
-            function remove2() {
-              $("#row2").remove();
-            }
-            function remove3() {
-              $("#row3").remove();
-            }
-            function remove4() {
-              $("#row4").remove();
-            }
-            function remove5() {
-              $("#row5").remove();
-            }
-        </script>
+          }).fail(function () {
+            alert("failed");
+        })
+      })
+    })
+  </script>
+  <script>
+    $(document).ready(function () {
+      $('#itemss4').on('change', function () {
+        select = $('#itemss4').val();
+        $.ajax({
+        type: "GET",
+        url: "{% url 'getit' %}",
+        data: {id: select}
+      }).done(function (response) {
+        var json_data = JSON.parse(response);
+          for (key in json_data) {
+            document.getElementById('qty4').value = json_data[key]['stock']
+          }
+        }).fail(function () {
+          alert("failed");
+        })
+      })
+    })
+  </script>
+  <script>
+    $(document).ready(function () {
+      $('#itemss3').on('change', function () {
+        select = $('#itemss3').val();
+        $.ajax({
+        type: "GET",
+        url: "{% url 'getit' %}",
+        data: {id: select}
+      }).done(function (response) {
+        var json_data = JSON.parse(response);
+          for (key in json_data) {
+            document.getElementById('qty3').value = json_data[key]['stock']
+          }
+        }).fail(function () {
+          alert("failed");
+        })
+      })
+    })
+  </script>
+  <script>
+    $(document).ready(function(){
+      $("#qty,#qty_hand").keyup(function(){
+        var total = 0;
+        var x = Number($("#qty").val());
+        var y = Number($("#qty_hand").val());
+        var total = y - x;
+        $("#nqty").val(total);
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function(){
+      $("#qty1,#qty_hand1").keyup(function(){
+        var total = 0;
+        var x = Number($("#qty1").val());
+        var y = Number($("#qty_hand1").val());
+        var total = y - x;
+        $("#nqty1").val(total);
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function(){
+      $("#qty2,#qty_hand2").keyup(function(){
+        var total = 0;
+        var x = Number($("#qty2").val());
+        var y = Number($("#qty_hand2").val());
+        var total = y - x;
+        $("#nqty2").val(total);
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function(){
+      $("#qty3,#qty_hand3").keyup(function(){
+        var total = 0;
+        var x = Number($("#qty3").val());
+        var y = Number($("#qty_hand3").val());
+        var total = y - x;
+        $("#nqty3").val(total);
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function(){
+      $("#qty4,#qty_hand4").keyup(function(){
+        var total = 0;
+        var x = Number($("#qty4").val());
+        var y = Number($("#qty_hand4").val());
+        var total = y - x;
+        $("#nqty4").val(total);
+      });
+    });
+  </script>
+  <script>
+    function showDiv() {
+      document.querySelector(".row1").style.display = "table-row";
+    }
+    function showDiv1() {
+      document.querySelector(".row2").style.display = "table-row";
+    }
+    function showDiv2() {
+      document.querySelector(".row3").style.display = "table-row";
+    }
+    function showDiv3() {
+      document.querySelector(".row4").style.display = "table-row";
+    }
+  </script>
+  <script>
+    function remove1() {
+      $("#row1").remove();
+    }
+    function remove2() {
+      $("#row2").remove();
+    }
+    function remove3() {
+      $("#row3").remove();
+    }
+    function remove4() {
+      $("#row4").remove();
+    }
+    function remove5() {
+      $("#row5").remove();
+    }
+  </script>          
 {% endblock %}

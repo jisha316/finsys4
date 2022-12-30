@@ -1267,8 +1267,11 @@
                             <td>
                                 <input type="text" name='hsn[]' id="hsn1${roinc}" placeholder='Enter HSN Code' class="form-control"/>
                             </td>                
-                            <td><input type="number" name='quantity[]' onchange="qtychange1(this)" placeholder='Enter Qty' id="qty1" class="form-control qty" step=0 min=0>
-                                <div><span>Available Qty :</span> <span id="qtyspan${roinc}"class='text-muted'></span></div>
+                            <td>
+                                <div class="d-flex">
+                                    <input type="number" name='quantity[]' onchange="qtychange1(this)" placeholder='Qty' id="qty1" class="form-control qty" step=0 min=0 style="width:80px">
+                                    <div class="form-control" style="color: rgba(255,255,255,0.6);"><span>Available Qty :</span> <span id="qtyspan${roinc}"></span></div> 
+                                </div>    
                             </td>                
                             <td>
                                 <input type="number" name='price[]' id="unit1${roinc}" placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0">
@@ -1303,7 +1306,7 @@
                                 </select>
                             </td>                
                             <td style="display: none;"><input type="number" step="any" name='taxamount1' id="taxamount1" class="form-control taxamount"></td>
-                            <td><button type="button" id="${roinc}" class="btn btn-danger remove_row">-</button></td>
+                            <td><a role="button" id="${roinc}" class="btn btn-outline-secondary ml-1 remove_row">-</a></td>
                         </tr>
                                                     
                     `
