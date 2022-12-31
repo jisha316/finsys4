@@ -1212,6 +1212,7 @@ class itemtable(models.Model):
     stock = models.IntegerField(blank=True,null=True,default='')
     stockin = models.IntegerField(default='0',blank=True,null=True)
     stockout = models.IntegerField(default='0',blank=True,null=True)
+    amount = models.IntegerField(default='0',blank=True,null=True)
     status = models.CharField(max_length=100,null=True)
 
 class unittable(models.Model):
@@ -1275,37 +1276,34 @@ class stockadjust(models.Model):
 
     item1 = models.CharField(max_length=100,null=True)
     qty1 = models.CharField(max_length=100,null=True)
-    qty_hand1 = models.CharField(max_length=100, default='')
+    qty_hand1 = models.IntegerField(default='0')
     new_qty1 = models.CharField(max_length=100, default='')
 
     item2 = models.CharField(max_length=100,null=True)
     qty2 = models.CharField(max_length=100,null=True)
-    qty_hand2 = models.CharField(max_length=100, default='')
+    qty_hand2 = models.IntegerField(default='0')
     new_qty2 = models.CharField(max_length=100, default='')
 
     item3 = models.CharField(max_length=100,null=True)
     qty3 = models.CharField(max_length=100,null=True)
-    qty_hand3 = models.CharField(max_length=100, default='')
+    qty_hand3 = models.IntegerField(default='0')
     new_qty3 = models.CharField(max_length=100, default='')
     
     item4 = models.CharField(max_length=100,null=True)
     qty4 = models.CharField(max_length=100,null=True)
-    qty_hand4 = models.CharField(max_length=100, default='')
+    qty_hand4 = models.IntegerField(default='0')
     new_qty4 = models.CharField(max_length=100, default='')
 
     item5 = models.CharField(max_length=100,null=True)
     qty5 = models.CharField(max_length=100,null=True)
-    qty_hand5 = models.CharField(max_length=100, default='')
+    qty_hand5 = models.IntegerField(default='0')
     new_qty5 = models.CharField(max_length=100, default='')
-
-
 
 class etransporter(models.Model):
     etransporterid = models.AutoField(("ETRANSPORTERID"), primary_key=True)
     cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
     name = models.CharField(max_length=255, default='', blank=True)   
     tid = models.CharField(max_length=255, default='', blank=True) 
-
 
 class ewayinv(models.Model):
     ewayinvid = models.AutoField(("EWAYINV"), primary_key=True)
@@ -1529,11 +1527,12 @@ class purchasedebit1(models.Model):
     tax = models.CharField(max_length=100,null=True)
     total = models.CharField(max_length=100,null=True)
 
-class item1(models.Model):
+class itemstock(models.Model):
     cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
     debit = models.ForeignKey(purchasedebit, on_delete=models.CASCADE,null=True)
     inv = models.ForeignKey(invoice, on_delete=models.CASCADE,null=True)
     bill = models.ForeignKey(purchasebill, on_delete=models.CASCADE,null=True)
+    stock = models.ForeignKey(stockadjust, on_delete=models.CASCADE,null=True)
     items = models.CharField(max_length=100,null=True)
     date = models.DateField(null=True)
     qty = models.IntegerField(null=True)
@@ -1541,6 +1540,7 @@ class item1(models.Model):
     transactions = models.CharField(max_length=100,null=True)
     details = models.CharField(max_length=100,null=True)
     details1 = models.CharField(max_length=100,blank=True,default='')
+    stocks = models.CharField(max_length=100,blank=True)
 
 class vendor_statment(models.Model):
     vendor = models.CharField(max_length=255, default='')
